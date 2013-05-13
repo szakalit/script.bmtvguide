@@ -1,0 +1,18 @@
+[B]Version 1.1 - 2013-04-06[/B]
+- Kosmetyczne poprawy wygladu.
+- Nowe logo wtyczki
+- Nowy fanart wtyczki
+- Dodano strefe czasowo w epg USA_EST
+- Poprawki w epg 
+- Wsparcie strm dla pluginow:
+*[plugin.video.polishtv.live]
+*[plugin.video.mrknow]
+*[plugin.video.weeb.tv]
+
+
+
+[B]Version 1.0 - 2013-03-30[/B]
+- Zmieniony plik gui.py dzieki ktoremu nie pojawia siê napis "otwieram strumien".
+- Dodano funkcje automatycznego pobierania EPG tworzonego przez serwis mods-xbmc.pl wraz z ikonami stacji.
+- Nowy, lepszy wyglad.
+- Nowe logo wtyczki.

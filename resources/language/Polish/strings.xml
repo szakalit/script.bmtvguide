@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+    <string id="30000">Brak opisu</string>
+    <string id="30001">[B]Trwa ładowanie danych...[/B]</string>
+    <string id="30002">Obliczanie pozostałego czasu...</string>
+    <string id="30003">Pozostało ok. %d sekund...</string>
+    <string id="30004">Ładowanie danych już jest w toku...</string>
+    <string id="30005">Kontrola myszą</string>
+    <string id="30006">Teraz</string>
+    <string id="30007">[B]Porada:[/B] Możesz także użyć kółka</string>
+    <string id="30008">Anuluj</string>
+
+    <string id="30100">Ogólne</string>
+    <string id="30101">Źródło</string>
+    <string id="30102">Pokaż kanały z kategorii</string>
+    <string id="30103">Plik XMLTV</string>
+    <string id="30104">Wyczyść cache...</string>
+    <string id="30105">Skończone!</string>
+    <string id="30106">Pokaż powiadomienie przed rozpoczęciem programu</string>
+    <string id="30107">Użyj obrazka progrmu jako tła</string>
+    <string id="30108">Wyczyść wszystkie przypomnienia...</string>
+    <string id="30109">Pamietaj o wyczyszczeniu cache przed zmieną źródła</string>
+    <string id="30110">Aktualizuj informacje o programie podczas startu XBMC</string>
+    <string id="30111">Odtwarzaj kanały używając wtyczki YouSee</string>
+    <string id="30112">Powiadomienia</string>
+    <string id="30113">Odtwarzaj kanały używając wtyczki Danish Live TV</string>
+    <string id="30114">Start</string>
+    <string id="30115">- wyczyść najpierw cache</string>
+    <string id="30116">Wyszukaj obrazki kanałów w</string>
+    <string id="30117">wybierz strefe czasową:</string>
+    <string id="30118">OSD menu dostepne</string>
+    <string id="30119">Wyłączenie OSD menu może naprawić kaltkowanie wideo.</string>
+    <string id="30120">Użyj alternatywnego żródła</string>
+    <string id="30121">Użycie alternatywnej metody streamingu nie jest kompatybilne z OSD menu</string>
+    
+    <string id="30150">Oops, coś poszło nie tak!</string>
+    <string id="30151">Ładowanie danych o programie nie powiodło się,</string>
+    <string id="30152">sprawdź ustawienia i spróbuj ponownie...</string>
+    <string id="30153">ponieważ ustawienia są błędne!</string>
+    
+    <string id="30154">Wygląda na to, że skórka której używasz</string>
+    <string id="30155">nie jest komatybilna z obecną wersją TV Guide.</string>
+    <string id="30156">Spróbuj zmienić skórkę...</string>    
+
+    <string id="30157">Wygląda na to, że baza danych TV Guide jest błędna.</string>
+    <string id="30158">Baza danych zostanie skasowana i zapisana ponownie.</string>
+    <string id="30159">Konfiguracja kanałów została utracona.</string>
+
+    <string id="30200">na [B]%s[/B] za 5 minut...</string>
+    <string id="30201">na [B]%s[/B] rozpoczyna się...</string>
+
+    <string id="30300">Oglądaj %s</string>
+    <string id="30301">Przypomnij</string>
+    <string id="30302">Nie przypominaj</string>
+    <string id="30303">Anuluj</string>
+    <string id="30304">Wybierz plik STRM</string>
+    <string id="30305">Możesz wybrać własny plik .strm aby oglądać ten kanał.</string>
+    <string id="30306">Usuń plik STRM</string>
+    <string id="30307">Kanały</string>
+    <string id="30308">Wyjdź</string>
+
+    <string id="30400">TV Guide jest skonfigurowany aby używać dodatku YouSee</string>
+    <string id="30401">który nie jest zainstalowany.</string>
+    <string id="30402">Odtwarzanie za pomocą tego dodatku zostało wyłączone.</string>
+
+    <string id="30403">TV Guide jest skonfigurowany aby używać dodatku Danish</string>
+    <string id="30404">który nie jest zainstalowany.</string>
+    <string id="30405">Odtwarzanie za pomocą tego dodatku zostało wyłączone.</string>
+
+    <string id="30500">[B]Edytuj kolejność i widoczność kanałów[/B]</string>
+    <string id="30501">Przesuwaj w górę i w dół aby zmienić pozycję kanału.[CR]Zaznacz lub wybierz lewo aby[CR]zaakceptować pozycję.</string>
+    <string id="30502">Zapisz</string>
+    <string id="30503">Anuluj</string>
+    
+    <string id="30600">[B]Ustaw stream[/B]</string>
+    <string id="30601">Plik .strm </string>
+    <string id="30602">Ulubione</string>
+    <string id="30603">Wtyczki</string>
+    <string id="30604">Podgląd</string>
+    <string id="30605">Zapisz</string>
+    <string id="30606">Anuluj</string>
+    <string id="30607">Wstrzymaj podgląd</string>
+
+    <string id="30610">Przeglądaj...</string>
+    <string id="30611">Wybierz przeglądaj... i znajdz twoj plik .strm. Gdy juz znajdziesz plik, możesz przetestowac poprawnosc działania używająć funkcji Podgląd.</string>
+
+    <string id="30620">Wybierz Ulubione. Wspierane są tylko Ulubione [I]PlayMedia[/I].</string>
+
+    <string id="30700">Ten kanał jest udostępniany przez wiele wtyczek..[CR]Wybierz jedną aby oglądać.</string>
+
+
+    
+  
+    <!-- weeb.tv mod -->
+    <string id="30800">Adres JSON-EPG</string>
+    <string id="30801">Odtwarzaj kanały używając wtyczki Weeb.Tv</string>
+    <string id="30802">TV Guide jest skonfigurowany aby używać dodatku Weeb.Tv</string>
+    <string id="30803">który nie jest zainstalowany.</string>
+    <string id="30804">Odtwarzanie za pomocą tego dodatku zostało wyłączone.</string>
+</strings>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.bmtvguide" name="m-TVGuide beta" version="1.0.0" provider-name="twinther [tommy@winther.nu][CR]zmodyfikowany - mods.xbmc.pl">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+        <import addon="script.module.simplejson" version="2.0.10"/>
+        <import addon="script.module.elementtree" version="1.2.7"/>
+        <import addon="script.module.buggalo" version="1.1.2"/>
+    </requires>
+    <extension point="xbmc.python.script" library="addon.py"/>
+    <extension point="xbmc.service" library="service.py" start="login" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">TV Guide with XMLTV and streaming support</summary>
+        <summary lang="da">TV Guide med XMLTV og streaming support</summary>
+        <summary lang="pl">Program TV obsługujący XMLTV oraz transmisję</summary>
+        <description lang="en">-Zmodyfikowana i przystosowana do polskiej tv wersja programu[CR]Sczegolowy opis na stronie www.mods-xbmc.pl</description>
+        <description lang="pl">-Zmodyfikowana i przystosowana do polskiej tv wersja programu[CR]Sczegolowy opis na stronie www.mods-xbmc.pl</description>
+        <platform>all</platform>
+        <language></language>
+    </extension>
+</addon>
