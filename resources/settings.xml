@@ -12,7 +12,7 @@
         <setting id="xmltv.file" label="30103" type="file" visible="eq(-3,1)" />
         <setting id="xmltv.logo.folder" label="30116" type="folder" visible="eq(-4,1)"/>
 
-        <setting id="ontv.url" label="30117" type="labelenum" visible="eq(-5,2)" values="http://mods-xbmc.pl/epg/_POLSKA.xml|http://mods-xbmc.pl/epg/_UK.xml|http://mods-xbmc.pl/epg/_USA_EST.xml|"/>
+        <setting id="ontv.url" label="30117" type="labelenum" visible="eq(-5,2)" values="http://mods-xbmc.pl/epg/_POLSKA.xml|http://szetela.eu/epg/guide.xml|"/>
     </category>
 
     <category label="30114">
