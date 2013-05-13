@@ -28,13 +28,13 @@ import buggalo
 
 from strings import *
 
-import ysapi
+
 import xbmc
 import xbmcgui
 import xbmcvfs
 import sqlite3
 
-SETTINGS_TO_CHECK = ['source', 'youseetv.category', 'xmltv.file', 'xmltv.logo.folder', 'ontv.url']
+SETTINGS_TO_CHECK = ['source', 'xmltv.file', 'xmltv.logo.folder', 'm-TVGuide']
 
 class Channel(object):
     def __init__(self, id, title, logo = None, streamUrl = None, visible = True, weight = -1):
@@ -755,47 +755,6 @@ class Source(object):
         return content
 
 
-class YouSeeTvSource(Source):
-    KEY = 'youseetv'
-
-    def __init__(self, addon):
-        self.date = datetime.datetime.today()
-        self.channelCategory = addon.getSetting('youseetv.category')
-        self.ysApi = ysapi.YouSeeTVGuideApi()
-
-    def getDataFromExternal(self, date, progress_callback = None):
-        channels = self.ysApi.channelsInCategory(self.channelCategory)
-        for idx, channel in enumerate(channels):
-            c = Channel(id = channel['id'], title = channel['name'], logo = channel['logo'])
-            yield c
-
-            for program in self.ysApi.programs(c.id, tvdate = date):
-                description = program['description']
-                if description is None:
-                    description = strings(NO_DESCRIPTION)
-
-                imagePrefix = program['imageprefix']
-
-                p = Program(
-                    c,
-                    program['title'],
-                    self._parseDate(program['begin']),
-                    self._parseDate(program['end']),
-                    description,
-                    imagePrefix + program['images_sixteenbynine']['large'],
-                    imagePrefix + program['images_sixteenbynine']['small'],
-                )
-                yield p
-
-
-            if progress_callback:
-                if not progress_callback(100.0 / len(channels) * idx):
-                    raise SourceUpdateCanceledException()
-
-    def _parseDate(self, dateString):
-        return datetime.datetime.fromtimestamp(dateString)
-
-
 class XMLTVSource(Source):
     KEY = 'xmltv'
 
@@ -826,7 +785,7 @@ class ONTVSource(Source):
     KEY = 'ontv'
 
     def __init__(self, addon):
-        self.ontvUrl = addon.getSetting('ontv.url')
+        self.ontvUrl = addon.getSetting('m-TVGuide')
 
     def getDataFromExternal(self, date, progress_callback = None):
         xml = self._downloadUrl(self.ontvUrl)
@@ -914,15 +873,14 @@ class FileWrapper(object):
 
 def instantiateSource():
     SOURCES = {
-        'YouSee.tv' : YouSeeTvSource,
         'XMLTV' : XMLTVSource,
-        'mods-xbmc' : ONTVSource
+        'm-TVGuide' : ONTVSource
     }
 
     try:
         activeSource = SOURCES[ADDON.getSetting('source')]
     except KeyError:
-        activeSource = SOURCES['YouSee.tv']
+        activeSource = SOURCES['m-TVGuide']
 
     return activeSource(ADDON)
 
