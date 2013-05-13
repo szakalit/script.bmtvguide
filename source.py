@@ -781,14 +781,14 @@ class XMLTVSource(Source):
         return fileUpdated > lastUpdated
 
 
-class ONTVSource(Source):
-    KEY = 'ontv'
+class MTVGUIDESource(Source):
+    KEY = 'm-TVGuide'
 
     def __init__(self, addon):
-        self.ontvUrl = addon.getSetting('m-TVGuide')
+        self.MTVGUIDEUrl = addon.getSetting('m-TVGuide')
 
     def getDataFromExternal(self, date, progress_callback = None):
-        xml = self._downloadUrl(self.ontvUrl)
+        xml = self._downloadUrl(self.MTVGUIDEUrl)
         io = StringIO.StringIO(xml)
         context = ElementTree.iterparse(io)
         return parseXMLTV(context, io, len(xml), None, progress_callback)
@@ -874,7 +874,7 @@ class FileWrapper(object):
 def instantiateSource():
     SOURCES = {
         'XMLTV' : XMLTVSource,
-        'm-TVGuide' : ONTVSource
+        'm-TVGuide' : MTVGUIDESource
     }
 
     try:
