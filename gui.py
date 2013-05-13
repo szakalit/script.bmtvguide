@@ -127,6 +127,7 @@ class TVGuide(xbmcgui.WindowXML):
         self.streamingService = streaming.StreamsService()
         self.player = xbmc.Player()
         self.database = None
+        self.redrawagain = False
 
         # add and removeControls were added post-eden
         self.hasAddControls = hasattr(self, 'addControls')
@@ -172,6 +173,7 @@ class TVGuide(xbmcgui.WindowXML):
         if self.initialized:
             # onInit(..) is invoked again by XBMC after a video addon exits after being invoked by XBMC.RunPlugin(..)
             xbmc.log("[script.bmtvguide] TVGuide.onInit(..) invoked, but we're already initialized!")
+            self.redrawagain = True
             return
         self.initialized = True
         self._hideControl(self.C_MAIN_MOUSE_CONTROLS, self.C_MAIN_OSD)
@@ -717,6 +719,9 @@ class TVGuide(xbmcgui.WindowXML):
 
         self._hideControl(self.C_MAIN_LOADING)
         self.redrawingEPG = False
+        if self.redrawagain:
+            self.redrawagain = False
+            self.onRedrawEPG(self.channelIdx, self.viewStartDate)
 
     def _clearEpg(self):
         if self.hasRemoveControls:
