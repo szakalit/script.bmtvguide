@@ -897,7 +897,7 @@ class TVGuide(xbmcgui.WindowXML):
 
     def setControlLabel(self, controlId, label):
         control = self.getControl(controlId)
-        if control and label:
+        if control:
             control.setLabel(label)
 
     def setControlText(self, controlId, text):
