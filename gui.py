@@ -128,13 +128,7 @@ class TVGuide(xbmcgui.WindowXML):
         self.player = xbmc.Player()
         self.database = None
         self.redrawagain = False
-
-        # add and removeControls were added post-eden
-        self.hasAddControls = hasattr(self, 'addControls')
-        self.hasRemoveControls = hasattr(self, 'removeControls')
-        buggalo.addExtraData('hasAddControls', self.hasAddControls)
-        buggalo.addExtraData('hasRemoveControls', self.hasRemoveControls)
-
+		
         self.mode = MODE_EPG
         self.currentChannel = None
 
@@ -701,18 +695,11 @@ class TVGuide(xbmcgui.WindowXML):
         if focusFunction is None:
             focusFunction = self._findControlAt
         focusControl = focusFunction(self.focusPoint)
-        if self.hasAddControls:
-            controls = [elem.control for elem in self.controlAndProgramList]
-            self.addControls(controls)
-            if focusControl is not None:
-                debug('onRedrawEPG - setFocus %d' % focusControl.getId())
-                self.setFocus(focusControl)
-        else:
-            for elem in self.controlAndProgramList:
-                self.addControl(elem.control)
-                if elem.control == focusControl:
-                    debug('onRedrawEPG - setFocus %d' % focusControl.getId())
-                    self.setFocus(focusControl)
+        controls = [elem.control for elem in self.controlAndProgramList]
+        self.addControls(controls)
+        if focusControl is not None:
+            debug('onRedrawEPG - setFocus %d' % focusControl.getId())
+            self.setFocus(focusControl)
 
         self.ignoreMissingControlIds.extend([elem.control.getId() for elem in self.controlAndProgramList])
 
@@ -726,17 +713,10 @@ class TVGuide(xbmcgui.WindowXML):
             self.onRedrawEPG(self.channelIdx, self.viewStartDate)
 
     def _clearEpg(self):
-        if self.hasRemoveControls:
-            controls = [elem.control for elem in self.controlAndProgramList]
-            try:
-                self.removeControls(controls)
-            except RuntimeError:
-                for elem in self.controlAndProgramList:
-                    try:
-                        self.removeControl(elem.control)
-                    except RuntimeError:
-                        pass # happens if we try to remove a control that doesn't exist
-        else:
+        controls = [elem.control for elem in self.controlAndProgramList]
+        try:
+            self.removeControls(controls)
+        except RuntimeError:
             for elem in self.controlAndProgramList:
                 try:
                     self.removeControl(elem.control)
@@ -759,9 +739,10 @@ class TVGuide(xbmcgui.WindowXML):
     def isSourceInitializationCancelled(self):
         return xbmc.abortRequested or self.isClosing
 
-    def onSourceInitialized(self):
-        self.notification = Notification(self.database, ADDON.getAddonInfo('path'))
-        self.onRedrawEPG(0, self.viewStartDate)
+    def onSourceInitialized(self, success):
+        if success:
+            self.notification = Notification(self.database, ADDON.getAddonInfo('path'))
+            self.onRedrawEPG(0, self.viewStartDate)
 
     def onSourceProgressUpdate(self, percentageComplete):
         control = self.getControl(self.C_MAIN_LOADING_PROGRESS)
@@ -902,7 +883,7 @@ class TVGuide(xbmcgui.WindowXML):
                 control.setVisible(False)
 
     def formatTime(self, timestamp):
-        format = xbmc.getRegion('time').replace(':%S', '')
+        format = xbmc.getRegion('time').replace(':%S', '').replace('%H%H', '%H')
         return timestamp.strftime(format)
 
     def formatDate(self, timestamp):
@@ -916,7 +897,7 @@ class TVGuide(xbmcgui.WindowXML):
 
     def setControlLabel(self, controlId, label):
         control = self.getControl(controlId)
-        if control:
+        if control and label:
             control.setLabel(label)
 
     def setControlText(self, controlId, text):
@@ -932,7 +913,12 @@ class TVGuide(xbmcgui.WindowXML):
             control = self.getControl(self.C_MAIN_TIMEBAR)
             if control:
                 (x, y) = control.getPosition()
-                control.setVisible(timeDelta.days == 0)
+                try:
+                    # Sometimes raises:
+                    # exceptions.RuntimeError: Unknown exception thrown from the call "setVisible"
+                    control.setVisible(timeDelta.days == 0)
+                except:
+                    pass
                 control.setPosition(self._secondsToXposition(timeDelta.seconds), y)
 
             if scheduleTimer and not xbmc.abortRequested and not self.isClosing:
@@ -1249,15 +1235,17 @@ class StreamSetupDialog(xbmcgui.WindowXMLDialog):
         elif controlId == self.C_STREAM_ADDONS_OK:
             listControl = self.getControl(self.C_STREAM_ADDONS_STREAMS)
             item = listControl.getSelectedItem()
-            stream = item.getProperty('stream')
-            self.database.setCustomStreamUrl(self.channel, stream)
+            if item:
+                stream = item.getProperty('stream')
+                self.database.setCustomStreamUrl(self.channel, stream)
             self.close()
 
         elif controlId == self.C_STREAM_FAVOURITES_OK:
             listControl = self.getControl(self.C_STREAM_FAVOURITES)
             item = listControl.getSelectedItem()
-            stream = item.getProperty('stream')
-            self.database.setCustomStreamUrl(self.channel, stream)
+            if item:
+                stream = item.getProperty('stream')
+                self.database.setCustomStreamUrl(self.channel, stream)
             self.close()
 
         elif controlId == self.C_STREAM_STRM_OK:
@@ -1280,11 +1268,13 @@ class StreamSetupDialog(xbmcgui.WindowXMLDialog):
             if visible == self.VISIBLE_ADDONS:
                 listControl = self.getControl(self.C_STREAM_ADDONS_STREAMS)
                 item = listControl.getSelectedItem()
-                stream = item.getProperty('stream')
+                if item:
+                    stream = item.getProperty('stream')
             elif visible == self.VISIBLE_FAVOURITES:
                 listControl = self.getControl(self.C_STREAM_FAVOURITES)
                 item = listControl.getSelectedItem()
-                stream = item.getProperty('stream')
+                if item:
+                    stream = item.getProperty('stream')
             elif visible == self.VISIBLE_STRM:
                 stream = self.strmFile
 
