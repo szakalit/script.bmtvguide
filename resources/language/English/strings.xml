@@ -86,5 +86,8 @@
     <string id="30802">TV Guide is configured to stream using Weeb.Tv</string>
     <string id="30803">addon which is not installed.</string>
     <string id="30804">Streaming using that addon is now disabled.</string>
+
+	<string id="30901">Update</string>
+	<string id="30902">Update now</string>
 </strings>
 

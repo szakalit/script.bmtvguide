@@ -21,5 +21,8 @@
         <setting id="notifications.enabled" label="30106" type="bool" default="true" />
         <setting label="30108" type="action" action="RunScript($CWD/notification.py)" />
     </category>
+	<category label="30901" >
+        <setting label="30902" type="action" action="UpdateAddonRepos" />
+    </category>
 </settings>
 

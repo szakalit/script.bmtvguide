@@ -343,7 +343,8 @@
                 <height>40</height>
                 <aspectratio>keep</aspectratio>
                 <fadetime>500</fadetime>
-                <visible>false</visible><!-- unused in default skin -->
+                <visible>true</visible>
+				<!-- unused in default skin -->
             </control>
             <control type="label" id="4021">
                 <description>Program time</description>
@@ -365,7 +366,7 @@
                 <textcolor>ffffffff</textcolor>
                 <font>font12</font>
                 <wrapmultiline>true</wrapmultiline>
-                <autoscroll time="2500" delay="4200" repeat="30000">true</autoscroll>
+                <autoscroll time="3500" delay="4500" repeat="10000">true</autoscroll>
             </control>
             <control type="image" id="4023">
                 <description>Program logo / Source logo</description>
@@ -376,7 +377,22 @@
                 <aspectratio>keep</aspectratio>
                 <fadetime>500</fadetime>
                 <texture>tvguide-logo-epg.png</texture>
-            </control>
+                <visible>True</visible>
+            </control> 
+			   <control type="label">
+				<description>time label</description>
+				<posx>1145</posx>
+				<posy>595</posy>
+				<width>200</width>
+				<height>30</height>
+				<align>right</align>
+				<aligny>center</aligny>
+				<font>font45caps_title</font>
+				<textcolor>white</textcolor>
+				<shadowcolor>black</shadowcolor>
+				<label>$INFO[System.Time]</label>
+				<visible>False</visible>
+			</control>
 
             <control type="image" id="4100">
                 <posx>180</posx>
