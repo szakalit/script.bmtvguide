@@ -670,6 +670,15 @@ class TVGuide(xbmcgui.WindowXML):
                 if program.notificationScheduled:
                     noFocusTexture = 'tvguide-program-red.png'
                     focusTexture = 'tvguide-program-red-focus.png'
+                elif program.categoryA == "Filmy":
+                    noFocusTexture = 'tvguide-program-green.png'
+                    focusTexture = 'tvguide-program-grey-focus.png'
+                elif program.categoryA == "Seriale":
+                    noFocusTexture = 'tvguide-program-pur.png'
+                    focusTexture = 'tvguide-program-grey-focus.png'
+                elif program.categoryA == "Informacja":
+                    noFocusTexture = 'tvguide-program-yel.png'
+                    focusTexture = 'tvguide-program-grey-focus.png'
                 else:
                     noFocusTexture = 'tvguide-program-grey.png'
                     focusTexture = 'tvguide-program-grey-focus.png'

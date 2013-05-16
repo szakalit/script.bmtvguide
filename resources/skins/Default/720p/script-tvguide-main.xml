@@ -15,6 +15,23 @@
         <control type="image">
             <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
+            <texture>tvguide-program-green.png</texture>
+        </control>
+        <control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>tvguide-program-pur.png</texture>
+        </control>
+        <control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>tvguide-program-yel.png</texture>
+        </control>		
+
+		
+        <control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
             <texture>tvguide-program-red-focus.png</texture>
         </control>
 
