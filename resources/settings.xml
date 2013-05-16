@@ -5,7 +5,6 @@
 
 		<setting id="xmltv.file" label="30103" type="file" visible="eq(-1,0)" />
         <setting id="xmltv.logo.folder" label="30116" type="folder" visible="eq(-2,0)"/>
-
         <setting id="m-TVGuide" label="30117" type="labelenum" visible="eq(-3,1)" values="http://mods-xbmc.pl/epg/_POLSKA.xml|http://szetela.eu/epg/guide.xml|"/>
     </category>
 
@@ -20,6 +19,25 @@
     <category label="30112">
         <setting id="notifications.enabled" label="30106" type="bool" default="true" />
         <setting label="30108" type="action" action="RunScript($CWD/notification.py)" />
+    </category>
+	<category label="Kolory" >
+		<setting label="Kolory kategorii" type="lsep" />
+        <setting id="kolor.Filmy" label="Filmy" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.Seriale" label="Seriale" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.Informacja" label="Informacja" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.Rozrywka" label="Rozrywka" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.Dokument" label="Dokument" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.Dladzieci" label="Dla dzieci" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.Sport" label="Sport" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.InteraktywnyProgramRozrywkowy" label="Interaktywny Program Rozrywkowy" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		
+		<setting label="Podstawowe kolory" type="lsep" />
+		<setting id="kolor.default" label="Podstawowy kolor" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.defaultfocus" label="Kolor aktywnego podœwietlenia" type="labelenum" values="default-focus|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+
+		<setting id="kolor.notification" label="Kolor dla przypomnienia" type="labelenum" values="default-przypomnienie|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+
+
     </category>
 	<category label="30901" >
         <setting label="30902" type="action" action="UpdateAddonRepos" />

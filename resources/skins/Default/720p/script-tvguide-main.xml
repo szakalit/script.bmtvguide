@@ -7,28 +7,77 @@
 		<posy>0</posy>
 	</coordinates>
 	<controls>
+
+        <control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>czarny.png</texture>
+        </control>
+        <control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>czerwony.png</texture>
+        </control>
+        <control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>default.png</texture>
+        </control>		
+        <control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>default-focus.png</texture>
+        </control>		
+
+        <control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>default-przypomnienie.png</texture>
+        </control>		
+        <control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>fioletowy.png</texture>
+        </control>
+		<control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>niebieski.png</texture>
+        </control>
+		<control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>pomaranczowy.png</texture>
+        </control>
+		<control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>purpurowy.png</texture>
+        </control>
+		<control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>seledynowy.png</texture>
+        </control>
+		<control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>zielony.png</texture>
+        </control>
+		<control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>zolty.png</texture>
+        </control>
+		
+
+
+
         <control type="image">
             <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>tvguide-program-red.png</texture>
-        </control>
-        <control type="image">
-            <description>workaround for texture not being loaded</description>
-            <posx>-10000</posx>
-            <texture>tvguide-program-green.png</texture>
-        </control>
-        <control type="image">
-            <description>workaround for texture not being loaded</description>
-            <posx>-10000</posx>
-            <texture>tvguide-program-pur.png</texture>
-        </control>
-        <control type="image">
-            <description>workaround for texture not being loaded</description>
-            <posx>-10000</posx>
-            <texture>tvguide-program-yel.png</texture>
         </control>		
-
-		
         <control type="image">
             <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>

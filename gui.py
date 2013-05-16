@@ -668,20 +668,27 @@ class TVGuide(xbmcgui.WindowXML):
 
             if cellWidth > 1:
                 if program.notificationScheduled:
-                    noFocusTexture = 'tvguide-program-red.png'
-                    focusTexture = 'tvguide-program-red-focus.png'
+                    noFocusTexture = ADDON.getSetting('kolor.notification')+'.png'
                 elif program.categoryA == "Filmy":
-                    noFocusTexture = 'tvguide-program-green.png'
-                    focusTexture = 'tvguide-program-grey-focus.png'
+                    noFocusTexture = ADDON.getSetting('kolor.Filmy')+'.png'
                 elif program.categoryA == "Seriale":
-                    noFocusTexture = 'tvguide-program-pur.png'
-                    focusTexture = 'tvguide-program-grey-focus.png'
+                    noFocusTexture = ADDON.getSetting('kolor.Seriale')+'.png'
                 elif program.categoryA == "Informacja":
-                    noFocusTexture = 'tvguide-program-yel.png'
-                    focusTexture = 'tvguide-program-grey-focus.png'
+                    noFocusTexture = ADDON.getSetting('kolor.Informacja')+'.png'
+                elif program.categoryA == "Rozrywka":
+                    noFocusTexture = ADDON.getSetting('kolor.Rozrywka')+'.png'
+                elif program.categoryA == "Dokument":
+                    noFocusTexture = ADDON.getSetting('kolor.Dokument')+'.png'
+                elif program.categoryA == "Dla dzieci":
+                    noFocusTexture = ADDON.getSetting('kolor.Dladzieci')+'.png'
+                elif program.categoryA == "Sport":
+                    noFocusTexture = ADDON.getSetting('kolor.Sport')+'.png'
+                elif program.categoryA == "Interaktywny Program Rozrywkowy":
+                    noFocusTexture = ADDON.getSetting('kolor.InteraktywnyProgramRozrywkowy')+'.png'
                 else:
-                    noFocusTexture = 'tvguide-program-grey.png'
-                    focusTexture = 'tvguide-program-grey-focus.png'
+                    noFocusTexture = ADDON.getSetting('kolor.default')+'.png'
+
+                focusTexture = ADDON.getSetting('kolor.defaultfocus')+'.png'
 
                 if cellWidth < 25:
                     title = '' # Text will overflow outside the button if it is too narrow
