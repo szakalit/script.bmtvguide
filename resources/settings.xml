@@ -6,6 +6,15 @@
 		<setting id="xmltv.file" label="30103" type="file" visible="eq(-1,0)" />
         <setting id="xmltv.logo.folder" label="30116" type="folder" visible="eq(-2,0)"/>
         <setting id="m-TVGuide" label="30117" type="labelenum" visible="eq(-3,1)" values="http://szetela.eu/epg/guide.xml|http://mods-xbmc.pl/epg/POLSKA.xml|"/>
+
+
+		<setting label="Weeb.tv" type="lsep" />
+		<setting id="username" type="text" label="Login" default="" />
+		<setting id="userpassword" type="text" option="hidden" label="Has³o" default="" />
+		<setting type="sep"/>
+		<setting type="lsep" label="Ustawienia jakoœci"/>
+		<setting id="video_quality" type="bool" label="Najwy¿sza jakoœæ (jaka jest dostêpna)" default="true" />
+
     </category>
 
     <category label="30114">

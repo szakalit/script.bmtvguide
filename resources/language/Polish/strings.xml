@@ -100,5 +100,89 @@
 
 	<string id="30901">Aktualizacja</string>
 	<string id="30902">Spawdź aktualizację</string>
+
+
+
+
+	   <!-- general settings -->
+    <string id="55001">Ustawienia logowania</string>
+    <string id="55002">Użytkownik:</string>
+	<string id="55003">Hasło:</string>
+	<string id="55004">Ustawienia jakości</string>
+	<string id="55005">Najwyższa jakość (jaka jest dostępna)</string>
+	<string id="55006">Ustawienia wyświetlania kanałów</string>
+	<string id="55007">Rodzaj wyświetlania:</string>
+	<string id="55008">Status konta</string>
+	<string id="55009">Wyłącz informacje o statusie gdy jest premium:</string>
+	<!--<string id="55010">Ustawienia odtwarzacza</string>
+	<string id="55011">Wyłącz pauzę:</string>-->
+	
+
+	<string id="66001">AXN</string>
+	<string id="66002">HBO</string>
+
+	<!-- main menu -->
+	<string id="56001">Kanały alfabetycznie A-Z [na żywo]</string>
+	<string id="56002">Kanały najczęściej wyświetlane teraz [na żywo]</string>
+	<string id="56003">Kanały najczęściej wyświetlane ogólnie [na żywo]</string>
+	<string id="56004">Kanały nie nadawane</string>
+	<string id="56005">Pokaż wszystkie kanały</string>
+	<string id="56006">Ulubione</string>
+	<string id="56100">Ustawienia</string>
+	
+	<!-- errors & messages -->
+	<string id="57001">Błąd API</string>
+	<string id="57002">Brak połączenia z serwisem.</string>
+	<string id="57003">Sprawdź połączenie sieciowe.</string>
+	<string id="57004">Brak kanałów odebranych z serwisu.</string>
+	<string id="57005">INFORMACJA.</string>
+	<string id="57006">Odtwarzanie wstrzymane.</string>
+	<string id="57007">Ten kanał jest aktualnie nie nadawany.</string>
+	<string id="57008">Spróbuj ponownie później.</string>
+	<string id="57009">Błąd skryptu!</string>
+	<string id="57010">Błąd! (getJsonFromAPI)</string>
+	<string id="57011">Połączenie z serwisem nie zwróciło żadnych danych.</string>
+	<string id="57012">Przyczyną może być brak dostępu do sieci,</string>
+	<string id="57013">lub błędny adres API serwisu.</string>
+	<string id="57014">Błąd! (API: setPlayer)</string>
+	<string id="57015">Nie uzyskano danych do autoryzacji.</string>
+	<string id="57016">Brak opisu.</string>
+	<string id="57017">Brak tagów.</string>
+	<string id="57018">Błąd odtwarzania!</string>
+	<string id="57019">Przekroczony limit darmowego oglądania lub zbyt duża ilość użytkowników.</string>
+	<string id="57020">Wykup konto premium już teraz, aby oglądać bez limitów!</string>
+	<string id="57021">Wewnętrzny problem odtwarzacza!</string>
+	<string id="57022">Niewłaściwa ścieżka wideo! Odtwarzanie wstrzymane.</string>
+	<string id="57023">Informacja.</string>
+	<string id="57024">Opcja dostępna w przyszłości.</string>
+	<string id="57025">Błędny klucz dostępu odczytany z API serwisu.</string>
+	<string id="57026">Brak nazwy kanału!</string>
+	<string id="57027">Serwer zamknął połączenie z nie znanych przyczyn! Spróbuj ponownie.</string>
+	<string id="57028">Odtwarzanie wstrzymane.</string>
+	<string id="57029">NA ŻYWO</string>
+	<string id="57030">NIE NADAJE</string>
+	<string id="57031">na</string>
+	<string id="57032">przez</string>
+	<string id="57033">nieznany</string>
+	<string id="57034">Informacje o koncie użytkownika</string>
+	<string id="57035">Twoje konto posiada status premium.</string>
+	<string id="57036">Nie posiadasz konta premium. Rozpoczynanie transmisji sponsorowanej.</string>
+	<string id="57037">Aby wykupić premium już teraz wejdź na stronę:</string>
+	<string id="57038">http://weeb.tv/premium</string>
+	<string id="57039">Aby wyłączyć tą informację wejdź w ustawienia.</string>
+	<string id="57040">Przycisk "pauza" powoduje wstrzymanie odtwarzania.</string>
+	<string id="57041">Zaleca się nie używanie go!</string>
+	<string id="57042">Błąd połączenia z serwisem!</string>
+	<string id="57043">Wybrany kanał nie istnieje!</string>
+	<string id="57044">Nie wybrano kanału!</string>
+	<string id="57045">Brak aktywnego serwera! Przepraszamy.</string>
+	<string id="57046">Regulamin nie został zaakceptowany!</string>
+	<string id="57047">Wejdź na http://weeb.tv/regulamin i zaakceptuj go, aby korzystać z usługi.</string>
+	
+	<!-- Channel informations -->
+	<string id="58000">Informacja o kanale</string>
+	<string id="58001">Nadaje</string>
+	<string id="58002">Platforma</string>
+	<string id="58003">Tagi</string>
 </strings>
 

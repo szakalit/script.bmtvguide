@@ -28,7 +28,7 @@ import source as src
 from notification import Notification
 from strings import *
 import buggalo
-
+import re, sys, os
 import streaming
 
 DEBUG = False
@@ -59,6 +59,25 @@ KEY_CONTEXT_MENU = 117
 KEY_HOME = 159
 
 CHANNELS_PER_PAGE = 9
+
+MESSAGE_ACTION_OK = 110
+MESSAGE_EXIT = 111
+MESSAGE_TITLE = 101
+MESSAGE_LINE1 = 102
+MESSAGE_LINE2 = 103
+MESSAGE_LINE3 = 104
+
+INFO_CANAL_NAME = 11
+INFO_PHOTO_DIFFUSE = 12
+INFO_PHOTO = 17
+INFO_BROADCAST = 13
+INFO_PLATFORM = 15
+INFO_DESCRIPTION = 16
+INFO_PLAY = 18
+INFO_CANCEL = 19
+
+__scriptID__  = "script.bmtvguide"
+__addon__ = xbmcaddon.Addon(__scriptID__)
 
 HALF_HOUR = datetime.timedelta(minutes = 30)
 
@@ -553,6 +572,8 @@ class TVGuide(xbmcgui.WindowXML):
                 else:
                     print "test3"
                     xbmc.executebuiltin('PlayMedia(%s)' % url)
+            elif url[0:7] == 'service':
+                xbmc.executebuiltin('XBMC.RunScript(script.bmtvguide,%s,0)' % url)
             else:
                 print "test4"
                 self.player.play(item = url, windowed = self.osdEnabled)
@@ -1380,3 +1401,117 @@ class ChooseStreamAddonDialog(xbmcgui.WindowXMLDialog):
     @buggalo.buggalo_try_except({'method' : 'ChooseStreamAddonDialog.onFocus'})
     def onFocus(self, controlId):
         pass
+
+
+class MessageDialog(xbmcgui.WindowXMLDialog):
+    def __init__(self, strXMLname, strFallbackPath, strDefaultName, forceFallback = True):
+        pass
+    
+    def setTableText(self, tab):
+        self.tabText = tab
+        
+    def getTableText(self):
+        return self.tabText
+    
+    def onInit(self):
+        self.loadTexts()
+    
+    def onAction(self, action):
+        if action == 1010:
+            self.close()
+    
+    def onClick(self, controlID):
+        if controlID == MESSAGE_ACTION_OK or controlID == MESSAGE_EXIT:
+            self.onAction(1010)
+    
+    def onFocus(self, controlID):
+        pass
+
+    def loadTexts(self):
+        self.getControl(MESSAGE_TITLE).setLabel(str(self.getTableText()['title']))
+        self.getControl(MESSAGE_LINE1).setLabel(str(self.getTableText()['text1']))
+        #if self.getTableText()['text2'] != "" and self.getTableText()['text3'] != "":
+        self.getControl(MESSAGE_LINE2).setLabel(str(self.getTableText()['text2']))
+        self.getControl(MESSAGE_LINE3).setLabel(str(self.getTableText()['text3']))
+    
+
+class InfoDialog(xbmcgui.WindowXMLDialog):
+    def __init__(self, strXMLname, strFallbackPath, strDefaultName, forceFallback = True):
+        jsn = main.ShowList()
+        set = main.Settings()
+        self.channelsTab =  jsn.getJsonFromAPI(set.setApiUrl())
+        self.iconUrl = set.setIconUrl()
+
+    def setChannel(self, channel):
+        self.channel = channel
+        
+    def getChannel(self):
+        return self.channel
+
+    def onInit(self):
+        chanInfo = self.getChannelInfoFromJSON(self.getChannel())
+        self.getControl(INFO_CANAL_NAME).setLabel(chanInfo['title'])
+        self.getControl(INFO_BROADCAST).setLabel(chanInfo['user'])
+        self.getControl(INFO_PHOTO).setImage(chanInfo['image'])
+        self.getControl(INFO_PHOTO_DIFFUSE).setImage(chanInfo['image'])
+        self.getControl(INFO_PLATFORM).setLabel("WEEB.TV")
+        self.getControl(INFO_DESCRIPTION).setText(chanInfo['desc'])
+
+    def onAction(self, action):
+        if action == 1010:
+            self.close()
+        elif action == 1011:
+            p = main.Handler()
+            p.setIsPlay("True")
+            self.close()
+    
+    def onClick(self, controlID):
+        if controlID == INFO_CANCEL:
+            self.onAction(1010)
+        elif controlID == INFO_PLAY:
+            self.onAction(1011)
+
+    def getChannelInfoFromJSON(self, channel):
+        dataInfo = { 'title': '', 'image': '', 'user': '', 'tags': '', 'desc': '' }
+        try:
+            for v,k in self.channelsTab.items():
+                if channel == int(k['cid']):
+                    cid = k['cid']
+                    title = k['channel_title']
+                    user = k['name']
+                    tags = k['channel_tags'] 
+                    desc = k['channel_description']
+                    img = k['channel_image']
+                    image = self.iconUrl + "no_video.png"
+                    if img == '1':
+                        image = self.iconUrl + cid + ".jpg"
+                    dataInfo = { 'title': title, 'image': image, 'user': user, 'tags': tags, 'desc': desc }
+                    break
+        except TypeError, typerr:
+            print typerr
+        return dataInfo
+
+
+class Windows:
+    def __init__(self):
+        pass
+    
+    def Warning(self, title, text1, text2, text3):
+        msg = MessageDialog("DialogWarning.xml", __addon__.getAddonInfo('path'), "Default")
+        tabText = { 'title': title, 'text1': text1, 'text2': text2, 'text3': text3 }
+        msg.setTableText(tabText)
+        msg.doModal()
+        del msg
+        
+    def Error(self, title, text1, text2, text3):
+        msg = MessageDialog("DialogError.xml", __addon__.getAddonInfo('path'), "Default")
+        tabText = { 'title': title, 'text1': text1, 'text2': text2, 'text3': text3 }
+        msg.setTableText(tabText)
+        msg.doModal()
+        del msg
+        
+    def Info(self, channel):
+        info = InfoDialog("DialogInfo.xml", __addon__.getAddonInfo('path'), "Default")
+        info.setChannel(channel)
+        info.doModal()
+        del info
