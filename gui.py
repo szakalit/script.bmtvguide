@@ -625,7 +625,7 @@ class TVGuide(xbmcgui.WindowXML):
         self._clearEpg()
 
         try:
-            self.channelIdx, channels, programs = self.database.getEPGView(channelStart, startTime, self.onSourceProgressUpdate, clearExistingProgramList = False)
+            self.channelIdx, channels, programs = self.database.getEPGView(channelStart, startTime, self.onSourceProgressUpdate, clearExistingProgramList = True)
         except src.SourceException:
             self.onEPGLoadError()
             return
