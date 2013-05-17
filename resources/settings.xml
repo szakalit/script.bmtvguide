@@ -5,7 +5,7 @@
 
 		<setting id="xmltv.file" label="30103" type="file" visible="eq(-1,0)" />
         <setting id="xmltv.logo.folder" label="30116" type="folder" visible="eq(-2,0)"/>
-        <setting id="m-TVGuide" label="30117" type="labelenum" visible="eq(-3,1)" values="http://mods-xbmc.pl/epg/_POLSKA.xml|http://szetela.eu/epg/guide.xml|"/>
+        <setting id="m-TVGuide" label="30117" type="labelenum" visible="eq(-3,1)" values="http://szetela.eu/epg/guide.xml|http://mods-xbmc.pl/epg/POLSKA.xml|"/>
     </category>
 
     <category label="30114">
