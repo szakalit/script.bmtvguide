@@ -14,7 +14,8 @@ os.path.join( __addon__.getAddonInfo('path'), "resources" )
 mainUrl = 'http://weeb.tv'
 playerUrl = mainUrl + '/api/setplayer'
 apiUrl = mainUrl + '/api/getChannelList'
-iconUrl = 'http://static2.weeb.tv/ci/'
+iconUrl = 'http://static2.weeb.tv/static2/ci/'
+
 HOST = 'XBMC'
 
 login = __addon__.getSetting('username')
@@ -238,15 +239,16 @@ class InitPlayer:
         dataInfo = { 'title': '', 'image': '', 'bitrate': '' }
         try:
             channelsArray = chan.getJsonFromAPI(apiUrl)
+            print(channelsArray)
             for v,k in channelsArray.items():
-                if channel == int(k['cid']):
+                if int(channel) == int(k['cid']):
                     cid = k['cid']
                     title = chan.decode(k['channel_title']).replace("\"", "")
                     bitrate = k['multibitrate'] 
                     img = k['channel_image']
                     image = iconUrl + "no_video.png"
                     if img == '1':
-                        image = iconUrl + cid + ".jpg"
+						image = iconUrl + cid + ".jpg"
                     dataInfo = { 'title': title, 'image': image, 'bitrate': bitrate }
                     break
         except TypeError, typerr:
