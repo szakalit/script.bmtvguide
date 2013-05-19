@@ -9,26 +9,19 @@
 
 
 		<setting label="Weeb.tv" type="lsep" />
-		<setting id="username" type="text" label="Login" default="" />
-		<setting id="userpassword" type="text" option="hidden" label="Has³o" default="" />
-		<setting type="sep"/>
-		<setting type="lsep" label="Ustawienia jakoœci"/>
-		<setting id="video_quality" type="bool" label="Najwy¿sza jakoœæ (jaka jest dostêpna)" default="true" />
+		<setting id="username" type="text" label="55002" default="" />
+		<setting id="userpassword" type="text" option="hidden" label="55003" default="" />
+		<setting id="video_quality" type="bool" label="55005" default="true" />
 
     </category>
 
-    <category label="30114">
+    <category label="Ustawienia">
         <setting id="cache.data.on.xbmc.startup" label="30110" type="bool" default="false" />
-        <setting id="enable.osd" label="30118" type="bool" default="true" enable="eq(2,false)" />
-        <setting label="30119" type="lsep" />
-        <setting id="alternative.playback" label="30120" type="bool" default="true" />
-        <setting label="30121" type="lsep" />
-    </category>
-
-    <category label="30112">
-        <setting id="notifications.enabled" label="30106" type="bool" default="true" />
+		<setting id="notifications.enabled" label="30106" type="bool" default="true" />
         <setting label="30108" type="action" action="RunScript($CWD/notification.py)" />
     </category>
+
+
 	<category label="Kolory" >
 		<setting label="Kolory kategorii" type="lsep" />
         <setting id="kolor.Filmy" label="Filmy" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>

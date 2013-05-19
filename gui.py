@@ -35,7 +35,7 @@ DEBUG = False
 
 MODE_EPG = 'EPG'
 MODE_TV = 'TV'
-MODE_OSD = 'OSD'
+
 
 ACTION_LEFT = 1
 ACTION_RIGHT = 2
@@ -59,25 +59,6 @@ KEY_CONTEXT_MENU = 117
 KEY_HOME = 159
 
 CHANNELS_PER_PAGE = 9
-
-MESSAGE_ACTION_OK = 110
-MESSAGE_EXIT = 111
-MESSAGE_TITLE = 101
-MESSAGE_LINE1 = 102
-MESSAGE_LINE2 = 103
-MESSAGE_LINE3 = 104
-
-INFO_CANAL_NAME = 11
-INFO_PHOTO_DIFFUSE = 12
-INFO_PHOTO = 17
-INFO_BROADCAST = 13
-INFO_PLATFORM = 15
-INFO_DESCRIPTION = 16
-INFO_PLAY = 18
-INFO_CANCEL = 19
-
-__scriptID__  = "script.bmtvguide"
-__addon__ = xbmcaddon.Addon(__scriptID__)
 
 HALF_HOUR = datetime.timedelta(minutes = 30)
 
@@ -122,12 +103,6 @@ class TVGuide(xbmcgui.WindowXML):
     C_MAIN_BACKGROUND = 4600
     C_MAIN_EPG = 5000
     C_MAIN_EPG_VIEW_MARKER = 5001
-    C_MAIN_OSD = 6000
-    C_MAIN_OSD_TITLE = 6001
-    C_MAIN_OSD_TIME = 6002
-    C_MAIN_OSD_DESCRIPTION = 6003
-    C_MAIN_OSD_CHANNEL_LOGO = 6004
-    C_MAIN_OSD_CHANNEL_TITLE = 6005
 
     def __new__(cls):
         return super(TVGuide, cls).__new__(cls, 'script-tvguide-main.xml', ADDON.getAddonInfo('path'))
@@ -150,11 +125,6 @@ class TVGuide(xbmcgui.WindowXML):
 		
         self.mode = MODE_EPG
         self.currentChannel = None
-
-        self.osdEnabled = ADDON.getSetting('enable.osd') == 'true' and ADDON.getSetting('alternative.playback') != 'true'
-        self.alternativePlayback = ADDON.getSetting('alternative.playback') == 'true'
-        self.osdChannel = None
-        self.osdProgram = None
 
         # find nearest half hour
         self.viewStartDate = datetime.datetime.today()
@@ -189,7 +159,7 @@ class TVGuide(xbmcgui.WindowXML):
             self.redrawagain = True
             return
         self.initialized = True
-        self._hideControl(self.C_MAIN_MOUSE_CONTROLS, self.C_MAIN_OSD)
+        self._hideControl(self.C_MAIN_MOUSE_CONTROLS)
         self._showControl(self.C_MAIN_EPG, self.C_MAIN_LOADING)
         self.setControlLabel(self.C_MAIN_LOADING_TIME_LEFT, strings(BACKGROUND_UPDATE_IN_PROGRESS))
         self.setFocusId(self.C_MAIN_LOADING_CANCEL)
@@ -221,8 +191,6 @@ class TVGuide(xbmcgui.WindowXML):
 
         if self.mode == MODE_TV:
             self.onActionTVMode(action)
-        elif self.mode == MODE_OSD:
-            self.onActionOSDMode(action)
         elif self.mode == MODE_EPG:
             self.onActionEPGMode(action)
 
@@ -233,56 +201,9 @@ class TVGuide(xbmcgui.WindowXML):
         elif action.getId() == ACTION_PAGE_DOWN:
             self._channelDown()
 
-        # elif not self.osdEnabled:
-         #     pass # skip the rest of the actions
-
         elif action.getId() in [ACTION_PARENT_DIR, KEY_NAV_BACK, KEY_CONTEXT_MENU, ACTION_PREVIOUS_MENU]:
             self.onRedrawEPG(self.channelIdx, self.viewStartDate)
 
-        elif action.getId() == ACTION_SHOW_INFO:
-            self._showOsd()
-
-    def onActionOSDMode(self, action):
-        if action.getId() == ACTION_SHOW_INFO:
-            self._hideOsd()
-
-        elif action.getId() in [ACTION_PARENT_DIR, KEY_NAV_BACK, KEY_CONTEXT_MENU, ACTION_PREVIOUS_MENU]:
-            self._hideOsd()
-            self.onRedrawEPG(self.channelIdx, self.viewStartDate)
-
-        elif action.getId() == ACTION_SELECT_ITEM:
-            if self.playChannel(self.osdChannel):
-                self._hideOsd()
-
-        elif action.getId() == ACTION_PAGE_UP:
-            self._channelUp()
-            self._showOsd()
-
-        elif action.getId() == ACTION_PAGE_DOWN:
-            self._channelDown()
-            self._showOsd()
-
-        elif action.getId() == ACTION_UP:
-            self.osdChannel = self.database.getPreviousChannel(self.osdChannel)
-            self.osdProgram = self.database.getCurrentProgram(self.osdChannel)
-            self._showOsd()
-
-        elif action.getId() == ACTION_DOWN:
-            self.osdChannel = self.database.getNextChannel(self.osdChannel)
-            self.osdProgram = self.database.getCurrentProgram(self.osdChannel)
-            self._showOsd()
-
-        elif action.getId() == ACTION_LEFT:
-            previousProgram = self.database.getPreviousProgram(self.osdProgram)
-            if previousProgram:
-                self.osdProgram = previousProgram
-                self._showOsd()
-
-        elif action.getId() == ACTION_RIGHT:
-            nextProgram = self.database.getNextProgram(self.osdProgram)
-            if nextProgram:
-                self.osdProgram = nextProgram
-                self._showOsd()
 
     def onActionEPGMode(self, action):
         if action.getId() in [ACTION_PARENT_DIR, KEY_NAV_BACK, ACTION_PREVIOUS_MENU]:
@@ -476,8 +397,6 @@ class TVGuide(xbmcgui.WindowXML):
         if ADDON.getSetting('program.background.enabled') == 'true' and program.imageLarge is not None:
             self.setControlImage(self.C_MAIN_BACKGROUND, program.imageLarge)
 
-        #if not self.osdEnabled and self.player.isPlaying():
-         #   self.player.stop()
 
     def _left(self, currentFocus):
         control = self._findControlOnLeft(currentFocus)
@@ -563,26 +482,17 @@ class TVGuide(xbmcgui.WindowXML):
                     pass
             
             if url[0:9] == 'plugin://':
-                if self.alternativePlayback:
-                    print "test1"
-                    xbmc.executebuiltin('XBMC.RunPlugin(%s)' % url)
-                elif self.osdEnabled:
-                    print "test2"
-                    xbmc.executebuiltin('PlayMedia(%s,1)' % url)
-                else:
-                    print "test3"
-                    xbmc.executebuiltin('PlayMedia(%s)' % url)
+                xbmc.executebuiltin('XBMC.RunPlugin(%s)' % url)
             elif url[0:7] == 'service':
                 xbmc.executebuiltin('XBMC.RunScript(script.bmtvguide,%s,0)' % url)
             else:
-                print "test4"
-                self.player.play(item = url, windowed = self.osdEnabled)
+                self.player.play(item = url)
 
             if not wasPlaying:
                 self._hideEpg()
 
         threading.Timer(1, self.waitForPlayBackStopped).start()
-        self.osdProgram = self.database.getCurrentProgram(self.currentChannel)
+        
 
         return url is not None
 
@@ -596,30 +506,6 @@ class TVGuide(xbmcgui.WindowXML):
             time.sleep(0.5)
 
         self.onPlayBackStopped()
-
-    def _showOsd(self):
-        if not self.osdEnabled:
-            return
-
-        if self.mode != MODE_OSD:
-            self.osdChannel = self.currentChannel
-
-        if self.osdProgram is not None:
-            self.setControlLabel(self.C_MAIN_OSD_TITLE, '[B]%s[/B]' % self.osdProgram.title)
-            self.setControlLabel(self.C_MAIN_OSD_TIME, '[B]%s - %s[/B]' % (self.formatTime(self.osdProgram.startDate), self.formatTime(self.osdProgram.endDate)))
-            self.setControlText(self.C_MAIN_OSD_DESCRIPTION, self.osdProgram.description)
-            self.setControlLabel(self.C_MAIN_OSD_CHANNEL_TITLE, self.osdChannel.title)
-            if self.osdProgram.channel.logo is not None:
-                self.setControlImage(self.C_MAIN_OSD_CHANNEL_LOGO, self.osdProgram.channel.logo)
-            else:
-                self.setControlImage(self.C_MAIN_OSD_CHANNEL_LOGO, '')
-
-        self.mode = MODE_OSD
-        self._showControl(self.C_MAIN_OSD)
-
-    def _hideOsd(self):
-        self.mode = MODE_TV
-        self._hideControl(self.C_MAIN_OSD)
 
     def _hideEpg(self):
         self._hideControl(self.C_MAIN_EPG)
@@ -806,7 +692,6 @@ class TVGuide(xbmcgui.WindowXML):
 
     def onPlayBackStopped(self):
         if not self.player.isPlaying() and not self.isClosing:
-            self._hideControl(self.C_MAIN_OSD)
             self.viewStartDate = datetime.datetime.today()
             self.viewStartDate -= datetime.timedelta(minutes = self.viewStartDate.minute % 30, seconds = self.viewStartDate.second)
             self.onRedrawEPG(self.channelIdx, self.viewStartDate)
@@ -1491,27 +1376,3 @@ class InfoDialog(xbmcgui.WindowXMLDialog):
             print typerr
         return dataInfo
 
-
-class Windows:
-    def __init__(self):
-        pass
-    
-    def Warning(self, title, text1, text2, text3):
-        msg = MessageDialog("DialogWarning.xml", __addon__.getAddonInfo('path'), "Default")
-        tabText = { 'title': title, 'text1': text1, 'text2': text2, 'text3': text3 }
-        msg.setTableText(tabText)
-        msg.doModal()
-        del msg
-        
-    def Error(self, title, text1, text2, text3):
-        msg = MessageDialog("DialogError.xml", __addon__.getAddonInfo('path'), "Default")
-        tabText = { 'title': title, 'text1': text1, 'text2': text2, 'text3': text3 }
-        msg.setTableText(tabText)
-        msg.doModal()
-        del msg
-        
-    def Info(self, channel):
-        info = InfoDialog("DialogInfo.xml", __addon__.getAddonInfo('path'), "Default")
-        info.setChannel(channel)
-        info.doModal()
-        del info
