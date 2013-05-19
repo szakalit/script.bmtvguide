@@ -211,7 +211,8 @@ class TVGuide(xbmcgui.WindowXML):
             return
 
         elif action.getId() == ACTION_MOUSE_MOVE:
-            self._showControl(self.C_MAIN_MOUSE_CONTROLS)
+            if ADDON.getSetting('pokazpanel') == 'true':
+				self._showControl(self.C_MAIN_MOUSE_CONTROLS)
             return
 
         elif action.getId() == KEY_CONTEXT_MENU:

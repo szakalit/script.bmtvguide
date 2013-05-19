@@ -4,34 +4,20 @@ import re, sys, os, cgi
 import xbmcplugin, xbmcgui, xbmcaddon, xbmc, gui
 import threading
 import simplejson as json
+from strings import *
 
-__scriptID__   = sys.modules[ "__main__" ].__scriptID__
-t = sys.modules[ "__main__" ].__language__
-__addon__ = xbmcaddon.Addon(__scriptID__)
 
-os.path.join( __addon__.getAddonInfo('path'), "resources" )
+t = ADDON.getLocalizedString
+os.path.join( ADDON.getAddonInfo('path'), "resources" )
 
 mainUrl = 'http://weeb.tv'
 playerUrl = mainUrl + '/api/setplayer'
 apiUrl = mainUrl + '/api/getChannelList'
 iconUrl = 'http://static2.weeb.tv/static2/ci/'
-
 HOST = 'XBMC'
-
-login = __addon__.getSetting('username')
-password = __addon__.getSetting('userpassword')
-
-multi = __addon__.getSetting('video_quality')
-
-
-#confluence: thumb: 500, biglist: 51, normal 50
-#transparency: thumb: 53, biglist: 52, normal: 590
-
-SKINS = {
-        'confluence': { 'opt1': 51, 'opt2': 50 },
-        'transparency': { 'opt1': 52, 'opt2': 590 }
-}
-
+login = ADDON.getSetting('username')
+password = ADDON.getSetting('userpassword')
+multi = ADDON.getSetting('video_quality')
 
 
 class ShowList:
@@ -309,12 +295,13 @@ class Messages:
         pass
 
     def Error(self, title, text1, text2 = "", text3 = ""):
-        err = gui.Windows()
-        err.Error(title, text1, text2, text3)
+        dialog = xbmcgui.Dialog()
+        dialog.ok(title,"\n\t" +text1 + "\n\t" + text2 + "\n\t" + text3)
+
 
     def Warning(self, title, text1, text2 = "", text3 = ""):
-        warn = gui.Windows()
-        warn.Warning(title, text1, text2, text3)
+        dialog = xbmcgui.Dialog()
+        dialog.ok(title,"\n\t" +text1 + "\n\t" + text2 + "\n\t" + text3)
 
 
                 
