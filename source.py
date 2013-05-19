@@ -165,7 +165,7 @@ class Database(object):
         self.event.set()
 
         while not self.eventResults.has_key(method.__name__):
-            time.sleep(0.1)
+            time.sleep(0.01)
 
         result = self.eventResults.get(method.__name__)
         del self.eventResults[method.__name__]
@@ -185,8 +185,11 @@ class Database(object):
                 break
 
             try:
-                self.conn = sqlite3.connect(self.databasePath, detect_types=sqlite3.PARSE_DECLTYPES)
+                self.conn = sqlite3.connect(self.databasePath, detect_types=sqlite3.PARSE_DECLTYPES, isolation_level=None)
                 self.conn.execute('PRAGMA foreign_keys = ON')
+                self.conn.execute('PRAGMA synchronous = OFF')
+                self.conn.execute('PRAGMA journal_mode = OFF')
+
                 self.conn.row_factory = sqlite3.Row
 
                 # create and drop dummy table to check if database is locked
@@ -332,37 +335,40 @@ class Database(object):
             c.execute("INSERT INTO updates(source, date, programs_updated) VALUES(?, ?, ?)", [self.source.KEY, dateStr, datetime.datetime.now()])
             updatesId = c.lastrowid
 
-            imported = imported_channels = imported_programs = 0
+            imported = 0
+            print("*************************************************************************** start")
+            q = datetime.datetime.now() 
+            c.execute('BEGIN IMMEDIATE TRANSACTION')
             for item in self.source.getDataFromExternal(date, progress_callback):
+                           
                 imported += 1
-
-                if imported % 10000 == 0:
-                    self.conn.commit()
+      
+                #if imported % 10000 == 0:
+                    #self.conn.commit()
 
                 if isinstance(item, Channel):
-                    imported_channels += 1
-                    channel = item
-                    c.execute('INSERT OR IGNORE INTO channels(id, title, logo, stream_url, visible, weight, source) VALUES(?, ?, ?, ?, ?, (CASE ? WHEN -1 THEN (SELECT COALESCE(MAX(weight)+1, 0) FROM channels WHERE source=?) ELSE ? END), ?)', [channel.id, channel.title, channel.logo, channel.streamUrl, channel.visible, channel.weight, self.source.KEY, channel.weight, self.source.KEY])
+                    c.execute('INSERT OR IGNORE INTO channels(id, title, logo, stream_url, visible, weight, source) VALUES(?, ?, ?, ?, ?, (CASE ? WHEN -1 THEN (SELECT COALESCE(MAX(weight)+1, 0) FROM channels WHERE source=?) ELSE ? END), ?)', [item.id, item.title, item.logo, item.streamUrl, item.visible, item.weight, self.source.KEY, item.weight, self.source.KEY])
                     if not c.rowcount:
                         c.execute('UPDATE channels SET title=?, logo=?, stream_url=?, visible=(CASE ? WHEN -1 THEN visible ELSE ? END), weight=(CASE ? WHEN -1 THEN weight ELSE ? END) WHERE id=? AND source=?',
-                            [channel.title, channel.logo, channel.streamUrl, channel.weight, channel.visible, channel.weight, channel.weight, channel.id, self.source.KEY])
+                            [item.title, item.logo, item.streamUrl, item.weight, item.visible, item.weight, item.weight, item.id, self.source.KEY])
 
                 elif isinstance(item, Program):
-                    imported_programs += 1
-                    program = item
-                    if isinstance(program.channel, Channel):
-                        channel = program.channel.id
-                    else:
-                        channel = program.channel
-
                     c.execute('INSERT INTO programs(channel, title, start_date, end_date, description, image_large, image_small, categoryA, categoryB, source, updates_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                        [channel, program.title, program.startDate, program.endDate, program.description, program.imageLarge, program.imageSmall, program.categoryA, program.categoryB, self.source.KEY, updatesId])
+                        [item.channel, item.title, item.startDate, item.endDate, item.description, item.imageLarge, item.imageSmall, item.categoryA, item.categoryB, self.source.KEY, updatesId])
 
+               
+
+
+
+
+            r = datetime.datetime.now()   
+            print "Funkcja %s - zaimportowano %s   -  %s na sekunde 4" % (r-q , imported, imported/(((r.minute * 60) + r.second)-((q.minute * 60) + q.second)) )
             # channels updated
+            c.execute('COMMIT TRANSACTION')
             c.execute("UPDATE sources SET channels_updated=? WHERE id=?", [datetime.datetime.now(), self.source.KEY])
             self.conn.commit()
-
-            if imported_channels == 0 or imported_programs == 0:
+            print("*************************************************************************** koniec 1" )
+            if imported == 0:
                 self.updateFailed = True
 
         except SourceUpdateCanceledException:
