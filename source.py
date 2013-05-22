@@ -25,16 +25,16 @@ import time
 import urllib2
 from xml.etree import ElementTree
 import buggalo
-
+from datetime import datetime as dt
 from strings import *
-
+from time import mktime
 
 import xbmc
 import xbmcgui
 import xbmcvfs
 import sqlite3
 
-SETTINGS_TO_CHECK = ['source', 'xmltv.file', 'xmltv.logo.folder', 'm-TVGuide']
+SETTINGS_TO_CHECK = ['source', 'xmltv.file', 'xmltv.logo.folder', 'm-TVGuide', 'Time.Zone']
 
 class Channel(object):
     def __init__(self, id, title, logo = None, streamUrl = None, visible = True, weight = -1):
@@ -815,6 +815,24 @@ def parseXMLTVDate(dateString):
     else:
         return None
 
+
+def TimeZone(dateString):
+    if dateString is not None:
+		zone = ADDON.getSetting('Time.Zone')
+       
+		if '-' in zone:
+			x = time.strptime(zone[1:],'%H:%M')
+			dateString = dateString - datetime.timedelta(hours=x.tm_hour) - datetime.timedelta(minutes=x.tm_min) - datetime.timedelta(hours=1)
+		elif '+' in zone:
+			x = time.strptime(zone[1:],'%H:%M')
+			dateString = dateString + datetime.timedelta(hours=x.tm_hour) + datetime.timedelta(minutes=x.tm_min) - datetime.timedelta(hours=1)
+		else:
+			dateString = dateString - datetime.timedelta(hours=1)
+       
+		return dateString
+    else:
+        return None
+
 def parseXMLTV(context, f, size, logoFolder, progress_callback):
     event, root = context.next()
     elements_parsed = 0
@@ -835,14 +853,13 @@ def parseXMLTV(context, f, size, logoFolder, progress_callback):
                     catb = cat[1].text
                 except:
                     catb = ""
-                #cata = elem.findtext("category")
-                #catb = elem.findtext("category")
+
                 icon = None
                 if iconElement is not None:
                     icon = iconElement
                 if not description:
                     description = strings(NO_DESCRIPTION)
-                result = Program(channel, elem.findtext('title'), parseXMLTVDate(elem.get('start')), parseXMLTVDate(elem.get('stop')), description, imageSmall=icon, categoryA=cata,categoryB=catb)
+                result = Program(channel, elem.findtext('title'), TimeZone(parseXMLTVDate(elem.get('start'))),TimeZone( parseXMLTVDate(elem.get('stop'))), description, imageSmall=icon, categoryA=cata,categoryB=catb)
 
             elif elem.tag == "channel":
                 id = elem.get("id")

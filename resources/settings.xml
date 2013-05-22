@@ -6,7 +6,7 @@
 		<setting id="xmltv.file" label="30103" type="file" visible="eq(-1,0)" />
         <setting id="xmltv.logo.folder" label="30116" type="folder" visible="eq(-2,0)"/>
         <setting id="m-TVGuide" label="30117" type="labelenum" visible="eq(-3,1)" values="http://szetela.eu/epg/guide.xml|http://mods-xbmc.pl/epg/POLSKA.xml|"/>
-
+		<setting id="Time.Zone" label="Strefa Czasowa UTC (+01:00 Polska)" type="labelenum"  default="+01:00" values="-12:00|-11:00|-10:00|-09:30|-09:00|-08:00|-07:00|-06:00|-05:00|-04:30|-04:00|-03:30|-03:00|-02:00|-01:00|00:00|+01:00|+02:00|+03:00|+03:30|+04:00|+04:30|+05:00|+05:30|+05:45|+06:00|+06:30|+07:00|+08:00|+09:00|+09:30|+10:00|+10:30|+11:00|+11:30|+12:00|+12:45|+13:00|+14:00|"/>
 
 		<setting label="Weeb.tv" type="lsep" />
 		<setting id="username" type="text" label="55002" default="" />
