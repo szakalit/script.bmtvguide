@@ -441,10 +441,10 @@
             </control>
             <control type="image" id="4024">
                 <description>Channel logo</description>
-                <posx>20</posx>
-                <posy>518</posy>
-                <width>80</width>
-                <height>40</height>
+                <posx>40</posx>
+                <posy>517</posy>
+                <width>50</width>
+                <height>30</height>
                 <aspectratio>keep</aspectratio>
                 <fadetime>500</fadetime>
                 <visible>true</visible>
@@ -466,7 +466,7 @@
                 <posx>30</posx>
                 <posy>555</posy>
                 <width>850</width>
-                <height>149</height>
+                <height>145</height>
                 <textcolor>ffffffff</textcolor>
                 <font>font12</font>
                 <wrapmultiline>true</wrapmultiline>
