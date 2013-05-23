@@ -69,7 +69,31 @@
             <posx>-10000</posx>
             <texture>zolty.png</texture>
         </control>
-		
+		<control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>default.png</texture>
+        </control>
+            <control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>kolorowy.png</texture>
+        </control>
+            <control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>srebrnoszary.png</texture>
+        </control>
+      <control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>kolorowyciemny.png</texture>
+        </control>
+      <control type="image">
+            <description>workaround for texture not being loaded</description>
+            <posx>-10000</posx>
+            <texture>dark.png</texture>
+        </control>
 
 
 
@@ -457,7 +481,7 @@
                 <aspectratio>keep</aspectratio>
                 <fadetime>500</fadetime>
                 <texture>tvguide-logo-epg.png</texture>
-                <visible>True</visible>
+                <visible>!Player.Playing</visible>
             </control> 
 			   <control type="label">
 				<description>time label</description>

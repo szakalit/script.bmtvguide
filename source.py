@@ -798,6 +798,24 @@ class MTVGUIDESource(Source):
     def __init__(self, addon):
         self.MTVGUIDEUrl = addon.getSetting('m-TVGuide')
 
+    def __init__(self, addon):
+        self.MTVGUIDEUrl = addon.getSetting('m-TVGuide')
+        if self.MTVGUIDEUrl == "POLSKA":
+            self.MTVGUIDEUrl = "http://mods-xbmc.pl/epg/POLSKA.xml"
+        elif self.MTVGUIDEUrl == "UK":
+            self.MTVGUIDEUrl = "http://mods-xbmc.pl/epg/UK.xml"
+        elif self.MTVGUIDEUrl == "USA_EST":
+            self.MTVGUIDEUrl = "http://mods-xbmc.pl/epg/USA_EST.xml"
+        elif self.MTVGUIDEUrl == "USA_PST":
+            self.MTVGUIDEUrl = "http://mods-xbmc.pl/epg/USA_PST.xml"
+        elif self.MTVGUIDEUrl == "EPG":
+            self.MTVGUIDEUrl = "http://mods-xbmc.pl/epg/EPG.xml"
+        elif self.MTVGUIDEUrl == "SZAKALIT":
+            self.MTVGUIDEUrl = "http://szetela.eu/epg/guide.xml"
+        else:
+            self.MTVGUIDEUrl = "http://mods-xbmc.pl/epg/EPG.xml"
+
+
     def getDataFromExternal(self, date, progress_callback = None):
         xml = self._downloadUrl(self.MTVGUIDEUrl)
         io = StringIO.StringIO(xml)
