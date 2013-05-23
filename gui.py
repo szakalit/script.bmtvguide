@@ -105,7 +105,7 @@ class TVGuide(xbmcgui.WindowXML):
     C_MAIN_EPG_VIEW_MARKER = 5001
 
     def __new__(cls):
-        return super(TVGuide, cls).__new__(cls, 'script-tvguide-main.xml', ADDON.getAddonInfo('path'))
+        return super(TVGuide, cls).__new__(cls, 'script-tvguide-main.xml', ADDON.getAddonInfo('path'), ADDON.getSetting('Skin'), "720p")
 
     def __init__(self):
         super(TVGuide, self).__init__()
@@ -234,7 +234,12 @@ class TVGuide(xbmcgui.WindowXML):
                 control = self.controlAndProgramList[0].control
             if control is not None:
                 self.setFocus(control)
-                return
+                if action.getId() == ACTION_MOUSE_WHEEL_UP:
+					pass
+                elif action.getId() == ACTION_MOUSE_WHEEL_DOWN:
+					pass
+                else:
+					return
 
         if action.getId() == ACTION_LEFT:
             self._left(currentFocus)
@@ -861,7 +866,7 @@ class PopupMenu(xbmcgui.WindowXMLDialog):
     C_POPUP_PROGRAM_TITLE = 4102
 
     def __new__(cls, database, program, showRemind):
-        return super(PopupMenu, cls).__new__(cls, 'script-tvguide-menu.xml', ADDON.getAddonInfo('path'))
+        return super(PopupMenu, cls).__new__(cls, 'script-tvguide-menu.xml', ADDON.getAddonInfo('path'), ADDON.getSetting('Skin'), "720p")
 
     def __init__(self, database, program, showRemind):
         """
@@ -939,7 +944,7 @@ class ChannelsMenu(xbmcgui.WindowXMLDialog):
     C_CHANNELS_CANCEL = 6004
 
     def __new__(cls, database):
-        return super(ChannelsMenu, cls).__new__(cls, 'script-tvguide-channels.xml', ADDON.getAddonInfo('path'))
+        return super(ChannelsMenu, cls).__new__(cls, 'script-tvguide-channels.xml', ADDON.getAddonInfo('path'), ADDON.getSetting('Skin'), "720p")
 
     def __init__(self, database):
         """
@@ -1087,7 +1092,7 @@ class StreamSetupDialog(xbmcgui.WindowXMLDialog):
     VISIBLE_ADDONS = 'addons'
 
     def __new__(cls, database, channel):
-        return super(StreamSetupDialog, cls).__new__(cls, 'script-tvguide-streamsetup.xml', ADDON.getAddonInfo('path'))
+        return super(StreamSetupDialog, cls).__new__(cls, 'script-tvguide-streamsetup.xml', ADDON.getAddonInfo('path'), ADDON.getSetting('Skin'), "720p")
 
     def __init__(self, database, channel):
         """
@@ -1250,7 +1255,7 @@ class ChooseStreamAddonDialog(xbmcgui.WindowXMLDialog):
     C_SELECTION_LIST = 1000
 
     def __new__(cls, addons):
-        return super(ChooseStreamAddonDialog, cls).__new__(cls, 'script-tvguide-streamaddon.xml', ADDON.getAddonInfo('path'))
+        return super(ChooseStreamAddonDialog, cls).__new__(cls, 'script-tvguide-streamaddon.xml', ADDON.getAddonInfo('path'), ADDON.getSetting('Skin'), "720p")
 
     def __init__(self, addons):
         super(ChooseStreamAddonDialog, self).__init__()

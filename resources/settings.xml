@@ -20,6 +20,7 @@
 		<setting id="notifications.enabled" label="30106" type="bool" default="true" />
         <setting label="30108" type="action" action="RunScript($CWD/notification.py)" />
 		<setting id="pokazpanel" label="30910" type="bool" default="true" />
+		<setting id="Skin" label="Wygl¹d" type="labelenum"  default="Default" values="Default|skin.aeon.nox|skin.rapier|"/>
     </category>
 
 
