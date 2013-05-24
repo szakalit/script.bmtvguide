@@ -6,40 +6,40 @@
 		<setting id="xmltv.file" label="30103" type="file" visible="eq(-1,0)" />
         <setting id="xmltv.logo.folder" label="30116" type="folder" visible="eq(-2,0)"/>
         <setting id="m-TVGuide" label="30117" type="labelenum" visible="eq(-3,1)" default="EPG" values="EPG|SZAKALIT|POLSKA|UK|USA_EST|USA_PST|"/>
-		<setting id="Time.Zone" label="Strefa Czasowa UTC (+01:00 Polska)" type="labelenum"  default="+01:00" values="-12:00|-11:00|-10:00|-09:30|-09:00|-08:00|-07:00|-06:00|-05:00|-04:30|-04:00|-03:30|-03:00|-02:00|-01:00|00:00|+01:00|+02:00|+03:00|+03:30|+04:00|+04:30|+05:00|+05:30|+05:45|+06:00|+06:30|+07:00|+08:00|+09:00|+09:30|+10:00|+10:30|+11:00|+11:30|+12:00|+12:45|+13:00|+14:00|"/>
+		<setting id="Time.Zone" label="30911" type="labelenum"  default="+01:00" values="-12:00|-11:00|-10:00|-09:30|-09:00|-08:00|-07:00|-06:00|-05:00|-04:30|-04:00|-03:30|-03:00|-02:00|-01:00|00:00|+01:00|+02:00|+03:00|+03:30|+04:00|+04:30|+05:00|+05:30|+05:45|+06:00|+06:30|+07:00|+08:00|+09:00|+09:30|+10:00|+10:30|+11:00|+11:30|+12:00|+12:45|+13:00|+14:00|"/>
 
-		<setting label="Weeb.tv" type="lsep" />
+		<setting label="30912" type="lsep" />
 		<setting id="username" type="text" label="55002" default="" />
 		<setting id="userpassword" type="text" option="hidden" label="55003" default="" />
 		<setting id="video_quality" type="bool" label="55005" default="true" />
 
     </category>
 
-    <category label="Ustawienia">
+    <category label="30913">
         <setting id="cache.data.on.xbmc.startup" label="30110" type="bool" default="false" />
 		<setting id="notifications.enabled" label="30106" type="bool" default="true" />
         <setting label="30108" type="action" action="RunScript($CWD/notification.py)" />
 		<setting id="pokazpanel" label="30910" type="bool" default="true" />
-		<setting id="Skin" label="Wygl¹d" type="labelenum"  default="Default" values="Default|skin.aeon.nox|skin.rapier|"/>
+		<setting id="Skin" label="30914" type="labelenum"  default="Default" values="Default|skin.aeon.nox|skin.rapier|"/>
     </category>
 
 
-	<category label="Kolory" >
-		<setting label="Kolory kategorii" type="lsep" />
-        <setting id="kolor.Filmy" label="Filmy" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
-		<setting id="kolor.Seriale" label="Seriale" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
-		<setting id="kolor.Informacja" label="Informacja" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
-		<setting id="kolor.Rozrywka" label="Rozrywka" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+	<category label="30930" >
+		<setting label="30931" type="lsep" />
+        <setting id="kolor.Filmy" label="30932" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.Seriale" label="30933" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.Informacja" label="30934" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.Rozrywka" label="30935" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
 		<setting id="kolor.Dokument" label="Dokument" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
-		<setting id="kolor.Dladzieci" label="Dla dzieci" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
-		<setting id="kolor.Sport" label="Sport" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
-		<setting id="kolor.InteraktywnyProgramRozrywkowy" label="Interaktywny Program Rozrywkowy" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.Dladzieci" label="30937" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.Sport" label="30938" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.InteraktywnyProgramRozrywkowy" label="30939" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
 		
-		<setting label="Podstawowe kolory" type="lsep" />
-		<setting id="kolor.default" label="Podstawowy kolor" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
-		<setting id="kolor.defaultfocus" label="Kolor aktywnego podœwietlenia" type="labelenum" values="default-focus|kolorowy|kolorowyciemny|srebrnoszary|dark|"/>
+		<setting label="30940" type="lsep" />
+		<setting id="kolor.default" label="30941" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.defaultfocus" label="30942" type="labelenum" values="default-focus|kolorowy|kolorowyciemny|srebrnoszary|dark|"/>
 
-		<setting id="kolor.notification" label="Kolor dla przypomnienia" type="labelenum" values="default-przypomnienie|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.notification" label="30943" type="labelenum" values="default-przypomnienie|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
 
 
     </category>

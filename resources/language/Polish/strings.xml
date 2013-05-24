@@ -9,7 +9,6 @@
     <string id="30006">Teraz</string>
     <string id="30007">[B]Porada:[/B] Możesz także użyć kółka</string>
     <string id="30008">Anuluj</string>
-
     <string id="30100">Ogólne</string>
     <string id="30101">Źródło</string>
     <string id="30102">Pokaż kanały z kategorii</string>
@@ -17,61 +16,34 @@
     <string id="30104">Wyczyść cache...</string>
     <string id="30105">Skończone!</string>
     <string id="30106">Pokaż powiadomienie przed rozpoczęciem programu</string>
-    <string id="30107">Użyj obrazka progrmu jako tła</string>
     <string id="30108">Wyczyść wszystkie przypomnienia...</string>
-    <string id="30109">Pamietaj o wyczyszczeniu cache przed zmieną źródła</string>
     <string id="30110">Aktualizuj informacje o programie podczas startu XBMC</string>
-    <string id="30111">Odtwarzaj kanały używając wtyczki YouSee</string>
-    <string id="30112">Powiadomienia</string>
-    <string id="30113">Odtwarzaj kanały używając wtyczki Danish Live TV</string>
-    <string id="30114">Start</string>
-    <string id="30115">- wyczyść najpierw cache</string>
     <string id="30116">Wyszukaj obrazki kanałów w</string>
-    <string id="30117">wybierz strefe czasową:</string>
-    <string id="30118">OSD menu dostepne</string>
-    <string id="30119">Wyłączenie OSD menu może naprawić kaltkowanie wideo.</string>
-    <string id="30120">Użyj alternatywnego żródła</string>
-    <string id="30121">Użycie alternatywnej metody streamingu nie jest kompatybilne z OSD menu</string>
-    
+    <string id="30117">Wybierz EPG</string>
     <string id="30150">Oops, coś poszło nie tak!</string>
     <string id="30151">Ładowanie danych o programie nie powiodło się,</string>
     <string id="30152">sprawdź ustawienia i spróbuj ponownie...</string>
     <string id="30153">ponieważ ustawienia są błędne!</string>
-    
     <string id="30154">Wygląda na to, że skórka której używasz</string>
     <string id="30155">nie jest komatybilna z obecną wersją TV Guide.</string>
     <string id="30156">Spróbuj zmienić skórkę...</string>    
-
     <string id="30157">Wygląda na to, że baza danych TV Guide jest błędna.</string>
     <string id="30158">Baza danych zostanie skasowana i zapisana ponownie.</string>
     <string id="30159">Konfiguracja kanałów została utracona.</string>
-
     <string id="30200">na [B]%s[/B] za 5 minut...</string>
     <string id="30201">na [B]%s[/B] rozpoczyna się...</string>
-
     <string id="30300">Oglądaj %s</string>
     <string id="30301">Przypomnij</string>
     <string id="30302">Nie przypominaj</string>
-    <string id="30303">Anuluj</string>
     <string id="30304">Wybierz plik STRM</string>
     <string id="30305">Możesz wybrać własny plik .strm aby oglądać ten kanał.</string>
     <string id="30306">Usuń plik STRM</string>
     <string id="30307">Kanały</string>
     <string id="30308">Wyjdź</string>
-
-    <string id="30400">TV Guide jest skonfigurowany aby używać dodatku YouSee</string>
-    <string id="30401">który nie jest zainstalowany.</string>
-    <string id="30402">Odtwarzanie za pomocą tego dodatku zostało wyłączone.</string>
-
-    <string id="30403">TV Guide jest skonfigurowany aby używać dodatku Danish</string>
-    <string id="30404">który nie jest zainstalowany.</string>
-    <string id="30405">Odtwarzanie za pomocą tego dodatku zostało wyłączone.</string>
-
     <string id="30500">[B]Edytuj kolejność i widoczność kanałów[/B]</string>
     <string id="30501">Przesuwaj w górę i w dół aby zmienić pozycję kanału.[CR]Zaznacz lub wybierz lewo aby[CR]zaakceptować pozycję.</string>
     <string id="30502">Zapisz</string>
     <string id="30503">Anuluj</string>
-    
     <string id="30600">[B]Ustaw stream[/B]</string>
     <string id="30601">Plik .strm </string>
     <string id="30602">Ulubione</string>
@@ -80,65 +52,50 @@
     <string id="30605">Zapisz</string>
     <string id="30606">Anuluj</string>
     <string id="30607">Wstrzymaj podgląd</string>
-
     <string id="30610">Przeglądaj...</string>
     <string id="30611">Wybierz przeglądaj... i znajdz twoj plik .strm. Gdy juz znajdziesz plik, możesz przetestowac poprawnosc działania używająć funkcji Podgląd.</string>
-
     <string id="30620">Wybierz Ulubione. Wspierane są tylko Ulubione [I]PlayMedia[/I].</string>
-
     <string id="30700">Ten kanał jest udostępniany przez wiele wtyczek..[CR]Wybierz jedną aby oglądać.</string>
-
-
-    
   
     <!-- weeb.tv mod -->
-    <string id="30800">Adres JSON-EPG</string>
-    <string id="30801">Odtwarzaj kanały używając wtyczki Weeb.Tv</string>
+
     <string id="30802">TV Guide jest skonfigurowany aby używać dodatku Weeb.Tv</string>
     <string id="30803">który nie jest zainstalowany.</string>
     <string id="30804">Odtwarzanie za pomocą tego dodatku zostało wyłączone.</string>
-
 	<string id="30901">Aktualizacja</string>
 	<string id="30902">Spawdź aktualizację</string>
 	<string id="30910">Pokazuj panel sterowania myszką</string>
-
+	<string id="30911">Strefa Czasowa UTC (+01:00 Polska)</string>
+    <string id="30912">Ustawienia Weeb.tv</string>
+    <string id="30913">Ustawienia</string>	
+	<string id="30914">Skórka</string>
+	<string id="30930">Kolory</string>
+	<string id="30931">Kolory kategorii</string>
+	<string id="30932">Filmy</string>
+	<string id="30933">Seriale</string>
+	<string id="30934">Informacja</string>
+	<string id="30935">Rozrywka</string>
+	<string id="30936">Dokument</string>
+	<string id="30937">Dla dzieci</string>
+	<string id="30938">Sport</string>
+	<string id="30939">Interaktywny Program Rozrywkowy</string>
+	<string id="30940">Podstawowe kolory</string>
+	<string id="30941">Podstawowy kolor</string>
+	<string id="30942">Kolor aktywnego podświetlenia</string>
+	<string id="30943">Kolor dla przypomnienia</string>
+>
 
 
 	   <!-- general settings -->
-    <string id="55001">Ustawienia logowania</string>
+
     <string id="55002">Użytkownik:</string>
 	<string id="55003">Hasło:</string>
-	<string id="55004">Ustawienia jakości</string>
 	<string id="55005">Najwyższa jakość (jaka jest dostępna)</string>
-	<string id="55006">Ustawienia wyświetlania kanałów</string>
-	<string id="55007">Rodzaj wyświetlania:</string>
-	<string id="55008">Status konta</string>
-	<string id="55009">Wyłącz informacje o statusie gdy jest premium:</string>
-	<!--<string id="55010">Ustawienia odtwarzacza</string>
-	<string id="55011">Wyłącz pauzę:</string>-->
-	
 
-	<string id="66001">AXN</string>
-	<string id="66002">HBO</string>
-
-	<!-- main menu -->
-	<string id="56001">Kanały alfabetycznie A-Z [na żywo]</string>
-	<string id="56002">Kanały najczęściej wyświetlane teraz [na żywo]</string>
-	<string id="56003">Kanały najczęściej wyświetlane ogólnie [na żywo]</string>
-	<string id="56004">Kanały nie nadawane</string>
-	<string id="56005">Pokaż wszystkie kanały</string>
-	<string id="56006">Ulubione</string>
-	<string id="56100">Ustawienia</string>
-	
 	<!-- errors & messages -->
 	<string id="57001">Błąd API</string>
 	<string id="57002">Brak połączenia z serwisem.</string>
 	<string id="57003">Sprawdź połączenie sieciowe.</string>
-	<string id="57004">Brak kanałów odebranych z serwisu.</string>
-	<string id="57005">INFORMACJA.</string>
-	<string id="57006">Odtwarzanie wstrzymane.</string>
-	<string id="57007">Ten kanał jest aktualnie nie nadawany.</string>
-	<string id="57008">Spróbuj ponownie później.</string>
 	<string id="57009">Błąd skryptu!</string>
 	<string id="57010">Błąd! (getJsonFromAPI)</string>
 	<string id="57011">Połączenie z serwisem nie zwróciło żadnych danych.</string>
@@ -146,43 +103,21 @@
 	<string id="57013">lub błędny adres API serwisu.</string>
 	<string id="57014">Błąd! (API: setPlayer)</string>
 	<string id="57015">Nie uzyskano danych do autoryzacji.</string>
-	<string id="57016">Brak opisu.</string>
-	<string id="57017">Brak tagów.</string>
 	<string id="57018">Błąd odtwarzania!</string>
 	<string id="57019">Przekroczony limit darmowego oglądania lub zbyt duża ilość użytkowników.</string>
 	<string id="57020">Wykup konto premium już teraz, aby oglądać bez limitów!</string>
 	<string id="57021">Wewnętrzny problem odtwarzacza!</string>
 	<string id="57022">Niewłaściwa ścieżka wideo! Odtwarzanie wstrzymane.</string>
-	<string id="57023">Informacja.</string>
-	<string id="57024">Opcja dostępna w przyszłości.</string>
-	<string id="57025">Błędny klucz dostępu odczytany z API serwisu.</string>
-	<string id="57026">Brak nazwy kanału!</string>
 	<string id="57027">Serwer zamknął połączenie z nie znanych przyczyn! Spróbuj ponownie.</string>
 	<string id="57028">Odtwarzanie wstrzymane.</string>
-	<string id="57029">NA ŻYWO</string>
-	<string id="57030">NIE NADAJE</string>
-	<string id="57031">na</string>
-	<string id="57032">przez</string>
-	<string id="57033">nieznany</string>
 	<string id="57034">Informacje o koncie użytkownika</string>
-	<string id="57035">Twoje konto posiada status premium.</string>
 	<string id="57036">Nie posiadasz konta premium. Rozpoczynanie transmisji sponsorowanej.</string>
 	<string id="57037">Aby wykupić premium już teraz wejdź na stronę:</string>
 	<string id="57038">http://weeb.tv/premium</string>
-	<string id="57039">Aby wyłączyć tą informację wejdź w ustawienia.</string>
-	<string id="57040">Przycisk "pauza" powoduje wstrzymanie odtwarzania.</string>
-	<string id="57041">Zaleca się nie używanie go!</string>
 	<string id="57042">Błąd połączenia z serwisem!</string>
 	<string id="57043">Wybrany kanał nie istnieje!</string>
 	<string id="57044">Nie wybrano kanału!</string>
 	<string id="57045">Brak aktywnego serwera! Przepraszamy.</string>
 	<string id="57046">Regulamin nie został zaakceptowany!</string>
 	<string id="57047">Wejdź na http://weeb.tv/regulamin i zaakceptuj go, aby korzystać z usługi.</string>
-	
-	<!-- Channel informations -->
-	<string id="58000">Informacja o kanale</string>
-	<string id="58001">Nadaje</string>
-	<string id="58002">Platforma</string>
-	<string id="58003">Tagi</string>
 </strings>
-

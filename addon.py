@@ -1,12 +1,8 @@
-import buggalo
 import gui
 import urllib, urllib2
 import re, sys, os
 import xbmcaddon, xbmcgui, xbmcplugin, xbmc
 from strings import *
-
-buggalo.SUBMIT_URL = ''
-
 
 import main
 
@@ -30,7 +26,7 @@ class Start:
 				w.doModal()
 				del w
             except Exception:
-				buggalo.onExceptionRaised()
+				pass
         elif service == "weebtv":
             self.Play(cid)
 
