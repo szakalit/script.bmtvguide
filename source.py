@@ -24,7 +24,6 @@ import datetime
 import time
 import urllib2
 from xml.etree import ElementTree
-import buggalo
 from datetime import datetime as dt
 from strings import *
 from time import mktime
@@ -110,11 +109,6 @@ class Database(object):
         self.updateInProgress = False
         self.updateFailed = False
         self.settingsChanged = None
-
-        #buggalo.addExtraData('source', self.source.KEY)
-        #for key in SETTINGS_TO_CHECK:
-        #    buggalo.addExtraData('setting: %s' % key, ADDON.getSetting(key))
-
         self.channelList = list()
 
         profilePath = xbmc.translatePath(ADDON.getAddonInfo('profile'))
@@ -154,7 +148,7 @@ class Database(object):
 
             except Exception:
                 print 'Database.eventLoop() >>>>>>>>>> exception!'
-                buggalo.onExceptionRaised()
+                
 
         print 'Database.eventLoop() >>>>>>>>>> exiting...'
 
@@ -192,7 +186,7 @@ class Database(object):
                 self.conn.execute("PRAGMA page_size = 16384");    
                 self.conn.execute("PRAGMA cache_size = 64000");    
                 self.conn.execute("PRAGMA temp_store = MEMORY");
-                self.conn.execute("PRAGMA locking_mode = EXCLUSIVE");
+                self.conn.execute("PRAGMA locking_mode = NORMAL");
                 self.conn.execute("PRAGMA count_changes = OFF");
                 self.conn.row_factory = sqlite3.Row
 
@@ -787,6 +781,8 @@ class XMLTVSource(Source):
         return parseXMLTV(context, f, f.size, self.logoFolder, progress_callback)
 
     def isUpdated(self, channelsLastUpdated, programLastUpdate):
+        if channelsLastUpdated is None or not xbmcvfs.exists(self.xmltvFile):
+			return True
         stat = xbmcvfs.Stat(self.xmltvFile)
         fileUpdated = datetime.datetime.fromtimestamp(stat.st_mtime())
         return fileUpdated > channelsLastUpdated

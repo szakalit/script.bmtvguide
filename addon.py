@@ -31,6 +31,8 @@ class Start:
             self.Play(cid)
 
 
+
 init = Start()
+ADDON.setSetting(id="off", value='True')
 
 

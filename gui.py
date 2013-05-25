@@ -27,7 +27,6 @@ import xbmcgui
 import source as src
 from notification import Notification
 from strings import *
-import buggalo
 import re, sys, os
 import streaming
 
@@ -131,27 +130,29 @@ class TVGuide(xbmcgui.WindowXML):
         self.viewStartDate -= datetime.timedelta(minutes = self.viewStartDate.minute % 30, seconds = self.viewStartDate.second)
 
     def getControl(self, controlId):
+        if ADDON.getSetting('off') == 'True':
+            ADDON.setSetting(id="off", value='False')
+            self.close()
         try:
             return super(TVGuide, self).getControl(controlId)
         except:
             if controlId in self.ignoreMissingControlIds:
                 return None
             if not self.isClosing:
-                xbmcgui.Dialog().ok(buggalo.getRandomHeading(), strings(SKIN_ERROR_LINE1), strings(SKIN_ERROR_LINE2), strings(SKIN_ERROR_LINE3))
                 self.close()
             return None
 
     def close(self):
         if not self.isClosing:
             self.isClosing = True
-      #      if self.player.isPlaying():
-       #         self.player.stop()
+            if self.player.isPlaying():
+                self.player.stop()
             if self.database:
                 self.database.close(super(TVGuide, self).close)
             else:
                 super(TVGuide, self).close()
 
-    @buggalo.buggalo_try_except({'method' : 'TVGuide.onInit'})
+
     def onInit(self):
         if self.initialized:
             # onInit(..) is invoked again by XBMC after a video addon exits after being invoked by XBMC.RunPlugin(..)
@@ -185,7 +186,7 @@ class TVGuide(xbmcgui.WindowXML):
         self.database.initialize(self.onSourceInitialized, self.isSourceInitializationCancelled)
         self.updateTimebar()
 
-    @buggalo.buggalo_try_except({'method' : 'TVGuide.onAction'})
+
     def onAction(self, action):
         debug('Mode is: %s' % self.mode)
 
@@ -271,7 +272,7 @@ class TVGuide(xbmcgui.WindowXML):
                 self._showContextMenu(program)
 
 
-    @buggalo.buggalo_try_except({'method' : 'TVGuide.onClick'})
+
     def onClick(self, controlId):
         if controlId in [self.C_MAIN_LOADING_CANCEL, self.C_MAIN_MOUSE_EXIT]:
             self.close()
@@ -374,7 +375,7 @@ class TVGuide(xbmcgui.WindowXML):
 
         super(TVGuide, self).setFocus(control)
 
-    @buggalo.buggalo_try_except({'method' : 'TVGuide.onFocus'})
+
     def onFocus(self, controlId):
         try:
             controlInFocus = self.getControl(controlId)
@@ -852,7 +853,7 @@ class TVGuide(xbmcgui.WindowXML):
             if scheduleTimer and not xbmc.abortRequested and not self.isClosing:
                 threading.Timer(1, self.updateTimebar).start()
         except Exception:
-            buggalo.onExceptionRaised()
+            pass
 
 
 class PopupMenu(xbmcgui.WindowXMLDialog):
@@ -882,7 +883,7 @@ class PopupMenu(xbmcgui.WindowXMLDialog):
         self.showRemind = showRemind
         self.buttonClicked = None
 
-    @buggalo.buggalo_try_except({'method' : 'PopupMenu.onInit'})
+
     def onInit(self):
         playControl = self.getControl(self.C_POPUP_PLAY)
         remindControl = self.getControl(self.C_POPUP_REMIND)
@@ -912,13 +913,13 @@ class PopupMenu(xbmcgui.WindowXMLDialog):
         else:
             remindControl.setLabel(strings(DONT_REMIND_PROGRAM))
 
-    @buggalo.buggalo_try_except({'method' : 'PopupMenu.onAction'})
+
     def onAction(self, action):
         if action.getId() in [ACTION_PARENT_DIR, ACTION_PREVIOUS_MENU, KEY_NAV_BACK, KEY_CONTEXT_MENU]:
             self.close()
             return
 
-    @buggalo.buggalo_try_except({'method' : 'PopupMenu.onClick'})
+
     def onClick(self, controlId):
         if controlId == self.C_POPUP_CHOOSE_STREAM and self.database.getCustomStreamUrl(self.program.channel):
             self.database.deleteCustomStreamUrl(self.program.channel)
@@ -956,12 +957,12 @@ class ChannelsMenu(xbmcgui.WindowXMLDialog):
         self.channelList = database.getChannelList(onlyVisible = False)
         self.swapInProgress = False
 
-    @buggalo.buggalo_try_except({'method' : 'ChannelsMenu.onInit'})
+
     def onInit(self):
         self.updateChannelList()
         self.setFocusId(self.C_CHANNELS_LIST)
 
-    @buggalo.buggalo_try_except({'method' : 'ChannelsMenu.onAction'})
+
     def onAction(self, action):
         if action.getId() in [ACTION_PARENT_DIR, ACTION_PREVIOUS_MENU, KEY_NAV_BACK, KEY_CONTEXT_MENU]:
             self.close()
@@ -993,7 +994,7 @@ class ChannelsMenu(xbmcgui.WindowXMLDialog):
             if idx < listControl.size() - 1:
                 self.swapChannels(idx, idx + 1)
 
-    @buggalo.buggalo_try_except({'method' : 'ChannelsMenu.onClick'})
+
     def onClick(self, controlId):
         if controlId == self.C_CHANNELS_LIST:
             listControl = self.getControl(self.C_CHANNELS_LIST)
@@ -1113,7 +1114,7 @@ class StreamSetupDialog(xbmcgui.WindowXMLDialog):
             self.player.stop()
         super(StreamSetupDialog, self).close()
 
-    @buggalo.buggalo_try_except({'method' : 'StreamSetupDialog.onInit'})
+
     def onInit(self):
         self.getControl(self.C_STREAM_VISIBILITY_MARKER).setLabel(self.VISIBLE_STRM)
 
@@ -1141,7 +1142,7 @@ class StreamSetupDialog(xbmcgui.WindowXMLDialog):
         self.updateAddonInfo()
 
 
-    @buggalo.buggalo_try_except({'method' : 'StreamSetupDialog.onAction'})
+
     def onAction(self, action):
         if action.getId() in [ACTION_PARENT_DIR, ACTION_PREVIOUS_MENU, KEY_NAV_BACK, KEY_CONTEXT_MENU]:
             self.close()
@@ -1151,7 +1152,7 @@ class StreamSetupDialog(xbmcgui.WindowXMLDialog):
             self.updateAddonInfo()
 
 
-    @buggalo.buggalo_try_except({'method' : 'StreamSetupDialog.onClick'})
+
     def onClick(self, controlId):
         if controlId == self.C_STREAM_STRM_BROWSE:
             stream = xbmcgui.Dialog().browse(1, ADDON.getLocalizedString(30304), 'video', '.strm')
@@ -1213,7 +1214,7 @@ class StreamSetupDialog(xbmcgui.WindowXMLDialog):
                     self.getControl(self.C_STREAM_FAVOURITES_PREVIEW).setLabel(strings(STOP_PREVIEW))
                     self.getControl(self.C_STREAM_STRM_PREVIEW).setLabel(strings(STOP_PREVIEW))
 
-    @buggalo.buggalo_try_except({'method' : 'StreamSetupDialog.onFocus'})
+
     def onFocus(self, controlId):
         if controlId == self.C_STREAM_STRM_TAB:
             self.getControl(self.C_STREAM_VISIBILITY_MARKER).setLabel(self.VISIBLE_STRM)
@@ -1262,7 +1263,7 @@ class ChooseStreamAddonDialog(xbmcgui.WindowXMLDialog):
         self.addons = addons
         self.stream = None
 
-    @buggalo.buggalo_try_except({'method' : 'ChooseStreamAddonDialog.onInit'})
+
     def onInit(self):
         items = list()
         for id, label, url in self.addons:
@@ -1277,19 +1278,19 @@ class ChooseStreamAddonDialog(xbmcgui.WindowXMLDialog):
 
         self.setFocus(listControl)
 
-    @buggalo.buggalo_try_except({'method' : 'ChooseStreamAddonDialog.onAction'})
+
     def onAction(self, action):
         if action.getId() in [ACTION_PARENT_DIR, ACTION_PREVIOUS_MENU, KEY_NAV_BACK]:
             self.close()
 
-    @buggalo.buggalo_try_except({'method' : 'ChooseStreamAddonDialog.onClick'})
+
     def onClick(self, controlId):
         if controlId == ChooseStreamAddonDialog.C_SELECTION_LIST:
             listControl = self.getControl(ChooseStreamAddonDialog.C_SELECTION_LIST)
             self.stream = listControl.getSelectedItem().getProperty('stream')
             self.close()
 
-    @buggalo.buggalo_try_except({'method' : 'ChooseStreamAddonDialog.onFocus'})
+
     def onFocus(self, controlId):
         pass
 
