@@ -24,6 +24,7 @@ class Start:
             try:
 				w = gui.TVGuide()
 				w.doModal()
+				w.close()
 				del w
             except Exception:
 				pass
@@ -33,6 +34,6 @@ class Start:
 
 
 init = Start()
-ADDON.setSetting(id="off", value='True')
+
 
 

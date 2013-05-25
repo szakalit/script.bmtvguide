@@ -130,9 +130,6 @@ class TVGuide(xbmcgui.WindowXML):
         self.viewStartDate -= datetime.timedelta(minutes = self.viewStartDate.minute % 30, seconds = self.viewStartDate.second)
 
     def getControl(self, controlId):
-        if ADDON.getSetting('off') == 'True':
-            ADDON.setSetting(id="off", value='False')
-            self.close()
         try:
             return super(TVGuide, self).getControl(controlId)
         except:
@@ -151,7 +148,6 @@ class TVGuide(xbmcgui.WindowXML):
                 self.database.close(super(TVGuide, self).close)
             else:
                 super(TVGuide, self).close()
-
 
     def onInit(self):
         if self.initialized:
