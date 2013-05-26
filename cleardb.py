@@ -17,41 +17,28 @@
 #  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 #  http://www.gnu.org/copyleft/gpl.html
 #
-import gui
-import urllib, urllib2
-import re, sys, os
-import xbmcaddon, xbmcgui, xbmcplugin, xbmc
+import datetime
+import os
+import xbmc
+import xbmcgui
+import source as src
+
 from strings import *
-import main
-
-class Start:
-    def __init__(self):
-		self.Run()
-		
-    def Play(self, cid):
-		run = main.InitPlayer()
-		run.LoadVideoLink(cid)
 
 
-    def Run(self):
-        parser = main.UrlParser()
-        params = parser.getParams()
-        service = parser.getParam(params, "service")
-        cid = parser.getParam(params, "cid")
-        if service == None or service == '':
-            try:
-				w = gui.mTVGuide()
-				w.doModal()
-				w.close()
-				del w
-            except Exception:
-				pass
-        elif service == "weebtv":
-            self.Play(cid)
+if __name__ == '__main__':
+    database = src.Database()
 
+    def onDBCleared():
+        xbmcgui.Dialog().ok(strings(CLEAR_DB), strings(DONE_DB))
 
+    def onInitialized(success):
+        if success:
+            database.clearDB()
+            database.close(onDBCleared)
+        else:
+            database.close()
 
-init = Start()
-
+    database.initialize(onInitialized)
 
 

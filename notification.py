@@ -35,7 +35,7 @@ class Notification(object):
         self.icon = os.path.join(self.addonPath, 'icon.png')
 
     def createAlarmClockName(self, programTitle, startTime):
-        return 'tvguide-%s-%s' % (programTitle, startTime)
+        return 'mtvguide-%s-%s' % (programTitle, startTime)
 
     def scheduleNotifications(self):
         xbmc.log("[script.bmtvguide] Scheduling notifications")

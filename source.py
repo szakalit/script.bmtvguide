@@ -734,7 +734,19 @@ class Database(object):
         self.conn.commit()
         c.close()
 
+    def clearDB(self):
+        self._invokeAndBlockForResult(self._clearDB)
 
+
+    def _clearDB(self):
+        c = self.conn.cursor()
+        c.execute('DELETE FROM programs')
+        c.execute('DELETE FROM notifications')
+        c.execute('DELETE FROM updates')
+        c.execute('DELETE FROM sources')
+        c.execute('UPDATE settings SET value=0 WHERE rowid=1')
+        self.conn.commit()
+        c.close()
 
 class Source(object):
     def getDataFromExternal(self, date, progress_callback = None):

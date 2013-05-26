@@ -80,7 +80,7 @@ class ControlAndProgram(object):
         self.control = control
         self.program = program
 
-class TVGuide(xbmcgui.WindowXML):
+class mTVGuide(xbmcgui.WindowXML):
     C_MAIN_DATE = 4000
     C_MAIN_TITLE = 4020
     C_MAIN_TIME = 4021
@@ -104,10 +104,10 @@ class TVGuide(xbmcgui.WindowXML):
     C_MAIN_EPG_VIEW_MARKER = 5001
 
     def __new__(cls):
-        return super(TVGuide, cls).__new__(cls, 'script-tvguide-main.xml', ADDON.getAddonInfo('path'), ADDON.getSetting('Skin'), "720p")
+        return super(mTVGuide, cls).__new__(cls, 'script-tvguide-main.xml', ADDON.getAddonInfo('path'), ADDON.getSetting('Skin'), "720p")
 
     def __init__(self):
-        super(TVGuide, self).__init__()
+        super(mTVGuide, self).__init__()
         self.initialized = False
         self.notification = None
         self.redrawingEPG = False
@@ -131,7 +131,7 @@ class TVGuide(xbmcgui.WindowXML):
 
     def getControl(self, controlId):
         try:
-            return super(TVGuide, self).getControl(controlId)
+            return super(mTVGuide, self).getControl(controlId)
         except:
             if controlId in self.ignoreMissingControlIds:
                 return None
@@ -145,9 +145,9 @@ class TVGuide(xbmcgui.WindowXML):
             if self.player.isPlaying():
                 self.player.stop()
             if self.database:
-                self.database.close(super(TVGuide, self).close)
+                self.database.close(super(mTVGuide, self).close)
             else:
-                super(TVGuide, self).close()
+                super(mTVGuide, self).close()
 
     def onInit(self):
         if self.initialized:
@@ -369,7 +369,7 @@ class TVGuide(xbmcgui.WindowXML):
             self.focusPoint.y = top + (control.getHeight() / 2)
             debug('New focus at %s' % self.focusPoint)
 
-        super(TVGuide, self).setFocus(control)
+        super(mTVGuide, self).setFocus(control)
 
 
     def onFocus(self, controlId):

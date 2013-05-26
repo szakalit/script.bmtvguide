@@ -21,6 +21,7 @@
         <setting label="30108" type="action" action="RunScript($CWD/notification.py)" />
 		<setting id="pokazpanel" label="30910" type="bool" default="true" />
 		<setting id="Skin" label="30914" type="labelenum"  default="Default" values="Default|skin.aeon.nox|skin.rapier|"/>
+		<setting label="30950" type="action" action="RunScript($CWD/cleardb.py)" />
     </category>
 
 
