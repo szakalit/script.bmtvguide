@@ -87,7 +87,7 @@ class StreamsService(object):
                 continue # ignore addons that are not installed
 
             for (label, stream) in self.getAddonStreams(id):
-                if label == channel.title:
+                if label.startswith(channel.title):
                     matches.append((id, label, stream))
 
         if len(matches) == 1:
