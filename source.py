@@ -210,7 +210,7 @@ class Database(object):
             except sqlite3.DatabaseError:
                 self.conn = None
                 if self.alreadyTriedUnlinking:
-                    xbmc.log('[script.tvguide] Database is broken and unlink() failed', xbmc.LOGDEBUG)
+                    xbmc.log('[script.bmtvguide] Database is broken and unlink() failed', xbmc.LOGDEBUG)
                     break
                 else:
                     try:

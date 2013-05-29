@@ -575,28 +575,57 @@ class mTVGuide(xbmcgui.WindowXML):
             cellWidth = self._secondsToXposition(stopDelta.seconds) - cellStart
             if cellStart + cellWidth > self.epgView.right:
                 cellWidth = self.epgView.right - cellStart
-
             if cellWidth > 1:
+
+                if program.categoryA == "Filmy":
+                    if ADDON.getSetting('kolor.Filmy') == '':
+						noFocusTexture = "default.png"
+                    else:
+						noFocusTexture = ADDON.getSetting('kolor.Filmy')+'.png'
+                elif program.categoryA == "Seriale":
+                    if ADDON.getSetting('kolor.Seriale') == '':
+						noFocusTexture = 'default.png'
+                    else:
+						noFocusTexture = ADDON.getSetting('kolor.Seriale')+'.png'
+                elif program.categoryA == "Informacja":
+                    if ADDON.getSetting('kolor.Informacja') == '':
+						noFocusTexture = 'default.png'
+                    else:
+						noFocusTexture = ADDON.getSetting('kolor.Informacja')+'.png'
+                elif program.categoryA == "Rozrywka":
+                    if ADDON.getSetting('kolor.Rozrywka') == '':
+						noFocusTexture = 'default.png'
+                    else:
+						noFocusTexture = ADDON.getSetting('kolor.Rozrywka')+'.png'
+                elif program.categoryA == "Dokument":
+                    if ADDON.getSetting('kolor.Dokument') == '':
+						noFocusTexture = 'default.png'
+                    else:
+						noFocusTexture = ADDON.getSetting('kolor.Dokument')+'.png'
+                elif program.categoryA == "Dla dzieci":
+                    if ADDON.getSetting('kolor.Dladzieci') == '':
+						noFocusTexture = 'default.png'
+                    else:
+						noFocusTexture = ADDON.getSetting('kolor.Dladzieci')+'.png'
+                elif program.categoryA == "Sport":
+                    if ADDON.getSetting('kolor.Sport') == '':
+						noFocusTexture = 'default.png'
+                    else:
+						noFocusTexture = ADDON.getSetting('kolor.Sport')+'.png'
+                elif program.categoryA == "Interaktywny Program Rozrywkowy":
+                    if ADDON.getSetting('kolor.InteraktywnyProgramRozrywkowy') == '':
+						noFocusTexture = 'default.png'
+                    else:
+						noFocusTexture = ADDON.getSetting('kolor.InteraktywnyProgramRozrywkowy')+'.png'
+                else:
+                    if ADDON.getSetting('kolor.default') == '':
+						noFocusTexture = 'default.png'
+                    else:
+						noFocusTexture = ADDON.getSetting('kolor.default')+'.png'
+
+
                 if program.notificationScheduled:
                     noFocusTexture = ADDON.getSetting('kolor.notification')+'.png'
-                elif program.categoryA == "Filmy":
-                    noFocusTexture = ADDON.getSetting('kolor.Filmy')+'.png'
-                elif program.categoryA == "Seriale":
-                    noFocusTexture = ADDON.getSetting('kolor.Seriale')+'.png'
-                elif program.categoryA == "Informacja":
-                    noFocusTexture = ADDON.getSetting('kolor.Informacja')+'.png'
-                elif program.categoryA == "Rozrywka":
-                    noFocusTexture = ADDON.getSetting('kolor.Rozrywka')+'.png'
-                elif program.categoryA == "Dokument":
-                    noFocusTexture = ADDON.getSetting('kolor.Dokument')+'.png'
-                elif program.categoryA == "Dla dzieci":
-                    noFocusTexture = ADDON.getSetting('kolor.Dladzieci')+'.png'
-                elif program.categoryA == "Sport":
-                    noFocusTexture = ADDON.getSetting('kolor.Sport')+'.png'
-                elif program.categoryA == "Interaktywny Program Rozrywkowy":
-                    noFocusTexture = ADDON.getSetting('kolor.InteraktywnyProgramRozrywkowy')+'.png'
-                else:
-                    noFocusTexture = ADDON.getSetting('kolor.default')+'.png'
 
                 focusTexture = ADDON.getSetting('kolor.defaultfocus')+'.png'
 

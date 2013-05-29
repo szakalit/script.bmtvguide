@@ -37,8 +37,8 @@
 		<setting id="kolor.InteraktywnyProgramRozrywkowy" label="30939" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
 		
 		<setting label="30940" type="lsep" />
-		<setting id="kolor.default" label="30941" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
-		<setting id="kolor.defaultfocus" label="30942" type="labelenum" values="default-focus|kolorowy|kolorowyciemny|srebrnoszary|dark|"/>
+		<setting id="kolor.default" label="30941" default="default" type="labelenum" values="default|czerwony|zielony|zolty|purpurowy|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
+		<setting id="kolor.defaultfocus" label="30942" type="labelenum" default="default-focus" values="default-focus|kolorowy|kolorowyciemny|srebrnoszary|dark|"/>
 
 		<setting id="kolor.notification" label="30943" type="labelenum" values="default-przypomnienie|czerwony|zielony|zolty|purpurowy|niebieski|pomaranczowy|fioletowy|seledynowy|czarny|"/>
 
