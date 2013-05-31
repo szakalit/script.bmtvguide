@@ -20,6 +20,7 @@
 import datetime
 import threading
 import time
+import ConfigParser
 
 import xbmc
 import xbmcgui
@@ -49,6 +50,12 @@ ACTION_SHOW_INFO = 11
 ACTION_NEXT_ITEM = 14
 ACTION_PREV_ITEM = 15
 
+C_MAIN_TITLE = 4920
+C_MAIN_TIME = 4921
+C_MAIN_DESCRIPTION = 4922
+C_MAIN_IMAGE = 4923
+C_MAIN_LOGO = 4924
+
 ACTION_MOUSE_WHEEL_UP = 104
 ACTION_MOUSE_WHEEL_DOWN = 105
 ACTION_MOUSE_MOVE = 107
@@ -57,7 +64,12 @@ KEY_NAV_BACK = 92
 KEY_CONTEXT_MENU = 117
 KEY_HOME = 159
 
-CHANNELS_PER_PAGE = 9
+config = ConfigParser.RawConfigParser()
+config.read(os.path.join(ADDON.getAddonInfo('path'), 'resources', 'skins',ADDON.getSetting('Skin'), 'settings.ini'))
+ini_chan = config.getint("Skin", "CHANNELS_PER_PAGE")
+ini_info = config.getboolean("Skin", "USE_INFO_DIALOG")
+
+CHANNELS_PER_PAGE = ini_chan
 
 HALF_HOUR = datetime.timedelta(minutes = 30)
 
@@ -82,11 +94,11 @@ class ControlAndProgram(object):
 
 class mTVGuide(xbmcgui.WindowXML):
     C_MAIN_DATE = 4000
-    C_MAIN_TITLE = 4020
-    C_MAIN_TIME = 4021
-    C_MAIN_DESCRIPTION = 4022
-    C_MAIN_IMAGE = 4023
-    C_MAIN_LOGO = 4024
+    C_MAIN_TITLE = 4920
+    C_MAIN_TIME = 4921
+    C_MAIN_DESCRIPTION = 4922
+    C_MAIN_IMAGE = 4923
+    C_MAIN_LOGO = 4924
     C_MAIN_TIMEBAR = 4100
     C_MAIN_LOADING = 4200
     C_MAIN_LOADING_PROGRESS = 4201
@@ -102,6 +114,7 @@ class mTVGuide(xbmcgui.WindowXML):
     C_MAIN_BACKGROUND = 4600
     C_MAIN_EPG = 5000
     C_MAIN_EPG_VIEW_MARKER = 5001
+    C_MAIN_INFO = 7000
 
     def __new__(cls):
         return super(mTVGuide, cls).__new__(cls, 'script-tvguide-main.xml', ADDON.getAddonInfo('path'), ADDON.getSetting('Skin'), "720p")
@@ -121,6 +134,7 @@ class mTVGuide(xbmcgui.WindowXML):
         self.player = xbmc.Player()
         self.database = None
         self.redrawagain = False
+        self.info = False
 		
         self.mode = MODE_EPG
         self.currentChannel = None
@@ -181,7 +195,12 @@ class mTVGuide(xbmcgui.WindowXML):
             return
         self.database.initialize(self.onSourceInitialized, self.isSourceInitializationCancelled)
         self.updateTimebar()
-
+   
+    def Info(self, channel):
+        info = InfoDialog(channel)
+        info.setChannel(channel)
+        info.doModal()
+        del info
 
     def onAction(self, action):
         debug('Mode is: %s' % self.mode)
@@ -209,7 +228,20 @@ class mTVGuide(xbmcgui.WindowXML):
 
         elif action.getId() == ACTION_MOUSE_MOVE:
             if ADDON.getSetting('pokazpanel') == 'true':
-				self._showControl(self.C_MAIN_MOUSE_CONTROLS)
+                self._showControl(self.C_MAIN_MOUSE_CONTROLS)
+            return
+
+        elif action.getId() == ACTION_SHOW_INFO:
+            if not ini_info:
+                return
+
+            try:
+                controlInFocus = self.getFocus()
+                program = self._getProgramFromControl(controlInFocus)
+                if program is not None:
+                    self.Info(program)
+            except:
+                pass
             return
 
         elif action.getId() == KEY_CONTEXT_MENU:
@@ -1319,92 +1351,63 @@ class ChooseStreamAddonDialog(xbmcgui.WindowXMLDialog):
     def onFocus(self, controlId):
         pass
 
-
-class MessageDialog(xbmcgui.WindowXMLDialog):
-    def __init__(self, strXMLname, strFallbackPath, strDefaultName, forceFallback = True):
-        pass
-    
-    def setTableText(self, tab):
-        self.tabText = tab
-        
-    def getTableText(self):
-        return self.tabText
-    
-    def onInit(self):
-        self.loadTexts()
-    
-    def onAction(self, action):
-        if action == 1010:
-            self.close()
-    
-    def onClick(self, controlID):
-        if controlID == MESSAGE_ACTION_OK or controlID == MESSAGE_EXIT:
-            self.onAction(1010)
-    
-    def onFocus(self, controlID):
-        pass
-
-    def loadTexts(self):
-        self.getControl(MESSAGE_TITLE).setLabel(str(self.getTableText()['title']))
-        self.getControl(MESSAGE_LINE1).setLabel(str(self.getTableText()['text1']))
-        #if self.getTableText()['text2'] != "" and self.getTableText()['text3'] != "":
-        self.getControl(MESSAGE_LINE2).setLabel(str(self.getTableText()['text2']))
-        self.getControl(MESSAGE_LINE3).setLabel(str(self.getTableText()['text3']))
-    
-
 class InfoDialog(xbmcgui.WindowXMLDialog):
-    def __init__(self, strXMLname, strFallbackPath, strDefaultName, forceFallback = True):
-        jsn = main.ShowList()
-        set = main.Settings()
-        self.channelsTab =  jsn.getJsonFromAPI(set.setApiUrl())
-        self.iconUrl = set.setIconUrl()
+
+    def __new__(cls, program ):
+        return super(InfoDialog, cls).__new__(cls, 'DialogInfo.xml', ADDON.getAddonInfo('path'), ADDON.getSetting('Skin'), "720p")
+
+    def __init__(self, program):
+        super(InfoDialog, self).__init__()
+        self.program = program
+    
+    def setControlLabel(self, controlId, label):
+        control = self.getControl(controlId)
+        if control:
+            control.setLabel(label)
+
+    def formatTime(self, timestamp):
+        format = xbmc.getRegion('time').replace(':%S', '').replace('%H%H', '%H')
+        return timestamp.strftime(format)
+
+    def setControlText(self, controlId, text):
+        control = self.getControl(controlId)
+        if control:
+            control.setText(text)
+
+    def setControlImage(self, controlId, image):
+        control = self.getControl(controlId)
+        if control:
+            control.setImage(image)
+
+    def onInit(self):
+        if self.program is None:
+            return
+
+        self.setControlLabel(C_MAIN_TITLE, '[B]%s[/B]' % self.program.title)
+        self.setControlLabel(C_MAIN_TIME, '[B]%s - %s[/B]' % (self.formatTime(self.program.startDate), self.formatTime(self.program.endDate)))
+        if self.program.description:
+            description = self.program.description
+        else:
+            description = strings("")
+        self.setControlText(C_MAIN_DESCRIPTION, description)
+
+        if self.program.channel.logo is not None:
+            self.setControlImage(C_MAIN_LOGO, self.program.channel.logo)
+        if self.program.imageSmall is not None:
+            self.setControlImage(C_MAIN_IMAGE, self.program.imageSmall)
+        if self.program.imageSmall is None:
+            self.setControlImage(C_MAIN_IMAGE, 'tvguide-logo-epg.png')
 
     def setChannel(self, channel):
         self.channel = channel
+
         
     def getChannel(self):
         return self.channel
 
-    def onInit(self):
-        chanInfo = self.getChannelInfoFromJSON(self.getChannel())
-        self.getControl(INFO_CANAL_NAME).setLabel(chanInfo['title'])
-        self.getControl(INFO_BROADCAST).setLabel(chanInfo['user'])
-        self.getControl(INFO_PHOTO).setImage(chanInfo['image'])
-        self.getControl(INFO_PHOTO_DIFFUSE).setImage(chanInfo['image'])
-        self.getControl(INFO_PLATFORM).setLabel("WEEB.TV")
-        self.getControl(INFO_DESCRIPTION).setText(chanInfo['desc'])
 
     def onAction(self, action):
-        if action == 1010:
+        if action.getId() == ACTION_SHOW_INFO:
             self.close()
-        elif action == 1011:
-            p = main.Handler()
-            p.setIsPlay("True")
-            self.close()
-    
-    def onClick(self, controlID):
-        if controlID == INFO_CANCEL:
-            self.onAction(1010)
-        elif controlID == INFO_PLAY:
-            self.onAction(1011)
 
-    def getChannelInfoFromJSON(self, channel):
-        dataInfo = { 'title': '', 'image': '', 'user': '', 'tags': '', 'desc': '' }
-        try:
-            for v,k in self.channelsTab.items():
-                if channel == int(k['cid']):
-                    cid = k['cid']
-                    title = k['channel_title']
-                    user = k['name']
-                    tags = k['channel_tags'] 
-                    desc = k['channel_description']
-                    img = k['channel_image']
-                    image = self.iconUrl + "no_video.png"
-                    if img == '1':
-                        image = self.iconUrl + cid + ".jpg"
-                    dataInfo = { 'title': title, 'image': image, 'user': user, 'tags': tags, 'desc': desc }
-                    break
-        except TypeError, typerr:
-            print typerr
-        return dataInfo
 

@@ -27,7 +27,7 @@ from xml.etree import ElementTree
 from datetime import datetime as dt
 from strings import *
 from time import mktime
-
+import ConfigParser
 import xbmc
 import xbmcgui
 import xbmcvfs
@@ -96,7 +96,10 @@ class DatabaseSchemaException(sqlite3.DatabaseError):
 
 class Database(object):
     SOURCE_DB = 'source.db'
-    CHANNELS_PER_PAGE = 9
+    config = ConfigParser.RawConfigParser()
+    config.read(os.path.join(ADDON.getAddonInfo('path'), 'resources', 'skins',ADDON.getSetting('Skin'), 'settings.ini'))
+    ini_chan = config.getint("Skin", "CHANNELS_PER_PAGE")
+    CHANNELS_PER_PAGE = ini_chan
 
     def __init__(self):
         self.conn = None

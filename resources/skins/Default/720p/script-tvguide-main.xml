@@ -429,7 +429,7 @@
                 </control>
             </control>
 
-            <control type="label" id="4020">
+            <control type="label" id="4920">
                 <description>Program title</description>
                 <posx>110</posx>
                 <posy>510</posy>
@@ -439,7 +439,7 @@
                 <font>font13</font>
                 <aligny>center</aligny>
             </control>
-            <control type="image" id="4024">
+            <control type="image" id="4924">
                 <description>Channel logo</description>
                 <posx>40</posx>
                 <posy>517</posy>
@@ -450,7 +450,7 @@
                 <visible>true</visible>
 				<!-- unused in default skin -->
             </control>
-            <control type="label" id="4021">
+            <control type="label" id="4921">
                 <description>Program time</description>
                 <posx>900</posx>
                 <posy>510</posy>
@@ -461,7 +461,7 @@
                 <align>right</align>
                 <aligny>center</aligny>
             </control>
-            <control type="textbox" id="4022">
+            <control type="textbox" id="4922">
                 <description>Program description</description>
                 <posx>30</posx>
                 <posy>555</posy>
@@ -472,7 +472,7 @@
                 <wrapmultiline>true</wrapmultiline>
                 <autoscroll time="3500" delay="4500" repeat="10000">true</autoscroll>
             </control>
-            <control type="image" id="4023">
+            <control type="image" id="4923">
                 <description>Program logo / Source logo</description>
                 <posx>930</posx>
                 <posy>530</posy>
