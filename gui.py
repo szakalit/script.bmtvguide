@@ -68,6 +68,7 @@ config = ConfigParser.RawConfigParser()
 config.read(os.path.join(ADDON.getAddonInfo('path'), 'resources', 'skins',ADDON.getSetting('Skin'), 'settings.ini'))
 ini_chan = config.getint("Skin", "CHANNELS_PER_PAGE")
 ini_info = config.getboolean("Skin", "USE_INFO_DIALOG")
+ini_key = config.getint("Skin", "INFO_KEY")
 
 CHANNELS_PER_PAGE = ini_chan
 
@@ -231,7 +232,7 @@ class mTVGuide(xbmcgui.WindowXML):
                 self._showControl(self.C_MAIN_MOUSE_CONTROLS)
             return
 
-        elif action.getId() == ACTION_SHOW_INFO:
+        elif action.getId() == ACTION_SHOW_INFO or action.getId() == 122 or action.getId() == ini_key:
             if not ini_info:
                 return
 
@@ -1407,7 +1408,7 @@ class InfoDialog(xbmcgui.WindowXMLDialog):
 
 
     def onAction(self, action):
-        if action.getId() == ACTION_SHOW_INFO:
+        if action.getId() == ACTION_SHOW_INFO or action.getId() == 122 or action.getId() == ini_key:
             self.close()
 
 

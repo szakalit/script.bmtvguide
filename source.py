@@ -184,13 +184,13 @@ class Database(object):
             try:
                 self.conn = sqlite3.connect(self.databasePath, detect_types=sqlite3.PARSE_DECLTYPES)
                 self.conn.execute('PRAGMA foreign_keys = ON')
-                self.conn.execute('PRAGMA synchronous = OFF')
-                self.conn.execute('PRAGMA journal_mode = OFF')
-                self.conn.execute("PRAGMA page_size = 16384");    
-                self.conn.execute("PRAGMA cache_size = 64000");    
-                self.conn.execute("PRAGMA temp_store = MEMORY");
-                self.conn.execute("PRAGMA locking_mode = NORMAL");
-                self.conn.execute("PRAGMA count_changes = OFF");
+                #self.conn.execute('PRAGMA synchronous = OFF')
+                #self.conn.execute('PRAGMA journal_mode = OFF')
+                #self.conn.execute("PRAGMA page_size = 16384");    
+                #self.conn.execute("PRAGMA cache_size = 64000");    
+                #self.conn.execute("PRAGMA temp_store = MEMORY");
+                #self.conn.execute("PRAGMA locking_mode = NORMAL");
+                #self.conn.execute("PRAGMA count_changes = OFF");
                 self.conn.row_factory = sqlite3.Row
 
                 # create and drop dummy table to check if database is locked
