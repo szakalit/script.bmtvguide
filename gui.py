@@ -24,7 +24,7 @@ import ConfigParser
 
 import xbmc
 import xbmcgui
-
+from time import mktime
 import source as src
 from notification import Notification
 from strings import *
@@ -1456,6 +1456,16 @@ class InfoDialog(xbmcgui.WindowXMLDialog):
         if self.program.imageSmall is None:
             self.setControlImage(C_MAIN_IMAGE, 'tvguide-logo-epg.png')
 
+        self.stdat = time.mktime(self.program.startDate.timetuple())
+        self.endat = time.mktime(self.program.endDate.timetuple())
+        self.nodat = time.mktime(datetime.datetime.now().timetuple())
+        self.per =  100 -  ((self.endat - self.nodat)/ ((self.endat - self.stdat)/100)) 
+        if self.per > 0 and self.per < 100:
+            self.getControl(4999).setVisible(True)
+            self.getControl(4999).setPercent(self.per)
+        else:
+            self.getControl(4999).setVisible(False)
+
     def setChannel(self, channel):
         self.channel = channel
 
@@ -1494,20 +1504,6 @@ class Pla(xbmcgui.WindowDialog):
         else:
             xbmc.Player().play(url)
 
-    def Info(self, channel):
-        info = InfoDialog(channel)
-        info.setChannel(channel)
-        info.doModal()
-        del info
-
-    def _channelUp(self):
-        channel = self.database.getNextChannel(self.program.channel)
-        self.epg.playChannel2(self.database._getCurrentProgram(self.program.channel))
-
-    def _channelDown(self):
-        channel = self.database.getPreviousChannel(self.program.channel)
-        self.epg.playChannel2(self.database._getCurrentProgram(self.program.channel))
-
     def onAction(self, action):
         if action == ACTION_ZURUECK:
             xbmc.Player().stop()
@@ -1516,7 +1512,7 @@ class Pla(xbmcgui.WindowDialog):
         if action.getId() == ACTION_SHOW_INFO or action.getId() == 122 or action.getId() == ini_key:
             try:
                 if self.program is not None:
-                    self.Info(self.program)
+                    self.epg.Info(self.program)
             except:
                 pass
             return
