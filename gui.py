@@ -68,7 +68,12 @@ config = ConfigParser.RawConfigParser()
 config.read(os.path.join(ADDON.getAddonInfo('path'), 'resources', 'skins',ADDON.getSetting('Skin'), 'settings.ini'))
 ini_chan = config.getint("Skin", "CHANNELS_PER_PAGE")
 ini_info = config.getboolean("Skin", "USE_INFO_DIALOG")
-ini_key = config.getint("Skin", "INFO_KEY")
+
+try:
+     ini_key = int(ADDON.getSetting('info_key'))
+except:
+     ini_key = 0
+
 
 CHANNELS_PER_PAGE = ini_chan
 

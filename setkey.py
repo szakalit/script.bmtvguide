@@ -38,34 +38,31 @@ from strings import *
 import re, sys, os
 import streaming
 
-
 class KeyListener(WindowXMLDialog):
+
   def __new__(cls):
-    return super(KeyListener, cls).__new__(cls, "DialogKaiToast.xml", "")
+    return super(KeyListener, cls).__new__(cls, 'DialogSetKey.xml', ADDON.getAddonInfo('path'), ADDON.getSetting('Skin'), "720p")
   
   def onInit(self):
     try:
-      self.getControl(401).addLabel("Nacisnij klawisz aby zapisac ")
-      self.getControl(402).addLabel("")
+      self.getControl(2).addLabel("Nacisnij klawisz aby zapisac ")
     except:
-      self.getControl(401).setLabel("Nacisnij klawisz aby zapisac ")
-      self.getControl(402).setLabel("")
-  
+      self.getControl(2).setLabel("Nacisnij klawisz aby zapisac ")
+
   def onAction(self, action):
-    self.key = action.getId()
-    self.close()
+    if action.getId() == 107:
+       return
+    else:
+       self.key = action.getId()
+       self.close()
 
 if __name__ == '__main__':
     dialog = KeyListener()
     dialog.doModal()
     key = dialog.key
     del dialog
-    pat = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'skins',ADDON.getSetting('Skin'), 'settings.ini')
-    config = ConfigParser.RawConfigParser()
-    config.read(pat)
-    config.set('Skin', 'INFO_KEY', key)
-    with open(str(pat), 'wb') as configfile:
-        config.write(configfile)
+    ADDON.setSetting(id="info_key", value=str(key))
+
 
 
 
