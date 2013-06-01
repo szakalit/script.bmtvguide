@@ -548,7 +548,7 @@ class mTVGuide(xbmcgui.WindowXML):
                 except:
                     pass
             
-            lo = Pla(self.program, url)
+            lo = Pla(self.program, self.database, url, self)
             lo.doModal()
             lo.close()
             del lo
@@ -1482,22 +1482,31 @@ class Pla(xbmcgui.WindowDialog):
         else:
             xbmc.Player().play(url)
 
-    def __init__(self, program, channel):
+    def __init__(self, program, database, url, epg):
+        self.epg = epg
         self.program = program
-        self.channel = channel
+        self.database = database
         self.controlAndProgramList = list()
-        if channel[0:9] == 'plugin://':
-            xbmc.executebuiltin('XBMC.RunPlugin(%s)' % channel)
-        elif channel[0:7] == 'service':
-            xbmc.executebuiltin('XBMC.RunScript(script.bmtvguide,%s,0)' % channel)
+        if url[0:9] == 'plugin://':
+            xbmc.executebuiltin('XBMC.RunPlugin(%s)' % url)
+        elif url[0:7] == 'service':
+            xbmc.executebuiltin('XBMC.RunScript(script.bmtvguide,%s,0)' % url)
         else:
-            xbmc.Player().play(channel)
+            xbmc.Player().play(url)
 
     def Info(self, channel):
         info = InfoDialog(channel)
         info.setChannel(channel)
         info.doModal()
         del info
+
+    def _channelUp(self):
+        channel = self.database.getNextChannel(self.program.channel)
+        self.epg.playChannel2(self.database._getCurrentProgram(self.program.channel))
+
+    def _channelDown(self):
+        channel = self.database.getPreviousChannel(self.program.channel)
+        self.epg.playChannel2(self.database._getCurrentProgram(self.program.channel))
 
     def onAction(self, action):
         if action == ACTION_ZURUECK:
@@ -1511,4 +1520,8 @@ class Pla(xbmcgui.WindowDialog):
             except:
                 pass
             return
+        if action.getId() == ACTION_PAGE_UP:
+            self.epg._channelUp()
 
+        if action.getId() == ACTION_PAGE_DOWN:
+            self.epg._channelDown()
