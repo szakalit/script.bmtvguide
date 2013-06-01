@@ -340,24 +340,50 @@ class mTVGuide(xbmcgui.WindowXML):
         if program is None:
             return
 
-        if not self.playChannel(program.channel):
-            result = self.streamingService.detectStream(program.channel)
-            if not result:
-                # could not detect stream, show context menu
-                self._showContextMenu(program)
-            elif type(result) == str:
-                # one single stream detected, save it and start streaming
-                self.database.setCustomStreamUrl(program.channel, result)
-                self.playChannel(program.channel)
+        if ADDON.getSetting('info.osd') == "true":
+            if not self.playChannel2(program):
+                result = self.streamingService.detectStream(program.channel)
+                if not result:
+                    # could not detect stream, show context menu
+                    self._showContextMenu(program)
+                elif type(result) == str:
+                    # one single stream detected, save it and start streaming
+                    self.database.setCustomStreamUrl(program.channel, result)
+                    self.playChannel2(program)
 
-            else:
-                # multiple matches, let user decide
+                else:
+                    # multiple matches, let user decide
 
-                d = ChooseStreamAddonDialog(result)
-                d.doModal()
-                if d.stream is not None:
-                    self.database.setCustomStreamUrl(program.channel, d.stream)
+                    d = ChooseStreamAddonDialog(result)
+                    d.doModal()
+                    if d.stream is not None:
+                        self.database.setCustomStreamUrl(program.channel, d.stream)
+                        self.playChannel2(program)
+
+        else:
+            if not self.playChannel(program.channel):
+                result = self.streamingService.detectStream(program.channel)
+                if not result:
+                    # could not detect stream, show context menu
+                    self._showContextMenu(program)
+                elif type(result) == str:
+                    # one single stream detected, save it and start streaming
+                    self.database.setCustomStreamUrl(program.channel, result)
                     self.playChannel(program.channel)
+
+                else:
+                    # multiple matches, let user decide
+
+                    d = ChooseStreamAddonDialog(result)
+                    d.doModal()
+                    if d.stream is not None:
+                        self.database.setCustomStreamUrl(program.channel, d.stream)
+                        self.playChannel(program.channel)
+
+
+
+
+
 
 
     def _showContextMenu(self, program):
@@ -505,11 +531,35 @@ class mTVGuide(xbmcgui.WindowXML):
         channel = self.database.getPreviousChannel(self.currentChannel)
         self.playChannel(channel)
 
+    def playChannel2(self, program):
+
+        self.program = program
+        self.currentChannel = program.channel
+        url = self.database.getStreamUrl(program.channel)
+        if url:
+            if url[-5:] == '.strm':
+                try:
+                    f = open(url)
+                    content = f.read()
+                    f.close()
+                    
+                    if content[0:9] == 'plugin://':
+                        url = content.strip()
+                except:
+                    pass
+            
+            lo = Pla(self.program, url)
+            lo.doModal()
+            lo.close()
+            del lo
+
+        return url is not None
+
+
     def playChannel(self, channel):
         self.currentChannel = channel
         wasPlaying = self.player.isPlaying()
         url = self.database.getStreamUrl(channel)
-        #url = 'plugin://plugin.video.polishtv.live/?service=weebtv&action=1&cid=3&title=%7E+TVN+HD+%7E'
         if url:
             if url[-5:] == '.strm':
                 try:
@@ -528,6 +578,8 @@ class mTVGuide(xbmcgui.WindowXML):
                 xbmc.executebuiltin('XBMC.RunScript(script.bmtvguide,%s,0)' % url)
             else:
                 self.player.play(item = url)
+
+
 
             if not wasPlaying:
                 self._hideEpg()
@@ -1416,4 +1468,47 @@ class InfoDialog(xbmcgui.WindowXMLDialog):
         if action.getId() == ACTION_SHOW_INFO or action.getId() == 122 or action.getId() == ini_key:
             self.close()
 
+
+ACTION_ENTER = 7
+ACTION_ZURUECK = 10
+
+class Pla(xbmcgui.WindowDialog):
+
+    def play(self, url):
+        if url[0:9] == 'plugin://':
+            xbmc.executebuiltin('XBMC.RunPlugin(%s)' % url)
+        elif url[0:7] == 'service':
+            xbmc.executebuiltin('XBMC.RunScript(script.bmtvguide,%s,0)' % url)
+        else:
+            xbmc.Player().play(url)
+
+    def __init__(self, program, channel):
+        self.program = program
+        self.channel = channel
+        self.controlAndProgramList = list()
+        if channel[0:9] == 'plugin://':
+            xbmc.executebuiltin('XBMC.RunPlugin(%s)' % channel)
+        elif channel[0:7] == 'service':
+            xbmc.executebuiltin('XBMC.RunScript(script.bmtvguide,%s,0)' % channel)
+        else:
+            xbmc.Player().play(channel)
+
+    def Info(self, channel):
+        info = InfoDialog(channel)
+        info.setChannel(channel)
+        info.doModal()
+        del info
+
+    def onAction(self, action):
+        if action == ACTION_ZURUECK:
+            xbmc.Player().stop()
+            self.close()
+
+        if action.getId() == ACTION_SHOW_INFO or action.getId() == 122 or action.getId() == ini_key:
+            try:
+                if self.program is not None:
+                    self.Info(self.program)
+            except:
+                pass
+            return
 

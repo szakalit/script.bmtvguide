@@ -23,6 +23,7 @@
 		<setting id="Skin" label="30914" type="labelenum"  default="Default" values="Default|12|"/>
 		<setting label="30950" type="action" action="RunScript($CWD/cleardb.py)" />
 		<setting label="Ustaw klawisz INFO" type="action" action="RunScript($CWD/setkey.py)" />
+		<setting id="info.osd" label="INFO OSD" type="bool" default="false" />
     </category>
 
 
