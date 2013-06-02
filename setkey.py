@@ -44,24 +44,84 @@ class KeyListener(WindowXMLDialog):
     return super(KeyListener, cls).__new__(cls, 'DialogSetKey.xml', ADDON.getAddonInfo('path'), ADDON.getSetting('Skin'), "720p")
   
   def onInit(self):
-    try:
-      self.getControl(2).addLabel("Nacisnij klawisz aby zapisac ")
-    except:
-      self.getControl(2).setLabel("Nacisnij klawisz aby zapisac ")
+    self.key = 0
+    self.a_info = 0
+    self.a_stop = 0
+    self.a_pp = 0
+    self.a_pm = 0
+    self.getControl(7001).setLabel(str(ADDON.getSetting('info_key')))
+    self.getControl(7002).setLabel(str(ADDON.getSetting('stop_key')))
+    self.getControl(7003).setLabel(str(ADDON.getSetting('pp_key')))
+    self.getControl(7004).setLabel(str(ADDON.getSetting('pm_key')))
+    pass
 
   def onAction(self, action):
-    if action.getId() == 107:
+    if action.getId() == 107 or action.getId() == 100 or action.getId() == 7 or action.getButtonCode() == 61453 or action.getId() == 10:
        return
+
     else:
-       self.key = action.getId()
-       self.close()
+       self.key = action.getButtonCode()
+       
+       if self.a_info == 1 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0:
+          ADDON.setSetting(id="info_key", value=str(self.key))
+          self.getControl(7001).setLabel(str(self.key))
+          self.getControl(7001).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.getControl(8001).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.getControl(9001).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.a_info = 0
+       if self.a_info == 0 and self.a_stop == 1 and self.a_pp == 0 and self.a_pm == 0:
+          ADDON.setSetting(id="stop_key", value=str(self.key))
+          self.getControl(7002).setLabel(str(self.key))
+          self.getControl(7002).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.getControl(8002).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.getControl(9002).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.a_stop = 0
+       if self.a_info == 0 and self.a_stop == 0 and self.a_pp == 1 and self.a_pm == 0:
+          ADDON.setSetting(id="pp_key", value=str(self.key))
+          self.getControl(7003).setLabel(str(self.key))
+          self.getControl(7003).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.getControl(8003).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.getControl(9003).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.a_pp = 0
+       if self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 1:
+          ADDON.setSetting(id="pm_key", value=str(self.key))
+          self.getControl(7004).setLabel(str(self.key))
+          self.getControl(7004).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.getControl(8004).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.getControl(9004).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.a_pm = 0
+
+
+  def onClick(self, controlId):
+        if controlId == 9001 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0:
+            self.a_info = 1
+            self.getControl(7001).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+            self.getControl(8001).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+            self.getControl(9001).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+        if controlId == 9002 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0:
+            self.a_stop = 1
+            self.getControl(7002).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+            self.getControl(8002).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+            self.getControl(9002).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+        if controlId == 9003 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0:
+            self.a_pp = 1
+            self.getControl(7003).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+            self.getControl(8003).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+            self.getControl(9003).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+        if controlId == 9004 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0:
+            self.a_pm = 1
+            self.getControl(7004).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+            self.getControl(8004).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+            self.getControl(9004).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+        if controlId == 9099 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0:
+            self.close()
+
 
 if __name__ == '__main__':
     dialog = KeyListener()
     dialog.doModal()
-    key = dialog.key
     del dialog
-    ADDON.setSetting(id="info_key", value=str(key))
+
 
 
 

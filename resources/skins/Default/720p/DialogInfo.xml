@@ -75,12 +75,20 @@
                 <posx>30</posx>
                 <posy>100</posy>
                 <width>610</width>
-                <height>385</height>
+                <height>355</height>
                 <textcolor>ffffffff</textcolor>
                 <font>font12</font>
                 <wrapmultiline>true</wrapmultiline>
                 <autoscroll time="3500" delay="2500" repeat="10000">true</autoscroll>
             </control>
+
+                <control type="progress" id="4999">
+                    <posx>30</posx>
+                    <posy>470</posy>
+                    <width>580</width>
+                    <height>20</height>
+                </control>
+
             <control type="image" id="4923">
                 <description>Program logo / Source logo</description>
                 <posx>640</posx>

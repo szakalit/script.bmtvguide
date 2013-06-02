@@ -1,4 +1,6 @@
 #
+#      Copyright (C) 2013 Szakalit
+#
 #      Copyright (C) 2013 Tommy Winther
 #      http://tommy.winther.nu
 #
@@ -24,6 +26,7 @@ import ConfigParser
 
 import xbmc
 import xbmcgui
+from xbmcgui import Dialog, WindowXMLDialog
 from time import mktime
 import source as src
 from notification import Notification
@@ -47,8 +50,10 @@ ACTION_SELECT_ITEM = 7
 ACTION_PARENT_DIR = 9
 ACTION_PREVIOUS_MENU = 10
 ACTION_SHOW_INFO = 11
+ACTION_STOP = 13
 ACTION_NEXT_ITEM = 14
 ACTION_PREV_ITEM = 15
+
 
 C_MAIN_TITLE = 4920
 C_MAIN_TIME = 4921
@@ -70,17 +75,28 @@ ini_chan = config.getint("Skin", "CHANNELS_PER_PAGE")
 ini_info = config.getboolean("Skin", "USE_INFO_DIALOG")
 
 try:
-     ini_key = int(ADDON.getSetting('info_key'))
+     KEY_INFO = int(ADDON.getSetting('info_key'))
 except:
-     ini_key = 0
-
+     KEY_INFO = 0
+try:
+     KEY_STOP = int(ADDON.getSetting('stop_key'))
+except:
+     KEY_STOP = 0
+try:
+     KEY_PP = int(ADDON.getSetting('pp_key'))
+except:
+     KEY_PP = 0
+try:
+     KEY_PM = int(ADDON.getSetting('pm_key'))
+except:
+     KEY_PM = 0
 
 CHANNELS_PER_PAGE = ini_chan
 
 HALF_HOUR = datetime.timedelta(minutes = 30)
 
 def debug(s):
-    if DEBUG: xbmc.log(str(s), xbmc.LOGDEBUG)
+    if DEBUG: xbmc.log("******************************************************************* " + str(s), xbmc.LOGDEBUG)
 
 class Point(object):
     def __init__(self):
@@ -150,6 +166,7 @@ class mTVGuide(xbmcgui.WindowXML):
         self.viewStartDate -= datetime.timedelta(minutes = self.viewStartDate.minute % 30, seconds = self.viewStartDate.second)
 
     def getControl(self, controlId):
+        #debug('getControl')
         try:
             return super(mTVGuide, self).getControl(controlId)
         except:
@@ -160,6 +177,7 @@ class mTVGuide(xbmcgui.WindowXML):
             return None
 
     def close(self):
+        debug('close')
         if not self.isClosing:
             self.isClosing = True
             if self.player.isPlaying():
@@ -170,10 +188,17 @@ class mTVGuide(xbmcgui.WindowXML):
                 super(mTVGuide, self).close()
 
     def onInit(self):
+        debug('onInit')
         if self.initialized:
             # onInit(..) is invoked again by XBMC after a video addon exits after being invoked by XBMC.RunPlugin(..)
             xbmc.log("[script.bmtvguide] TVGuide.onInit(..) invoked, but we're already initialized!")
             self.redrawagain = True
+            debug('redrawagain')
+            #if self.redrawingEPG == False:
+            #    xbmc.log('redrawagain 2 channel %s' % self.channelIdx )
+            #    self.onRedrawEPG(self.channelIdx, self.viewStartDate)
+
+
             return
         self.initialized = True
         self._hideControl(self.C_MAIN_MOUSE_CONTROLS)
@@ -203,13 +228,15 @@ class mTVGuide(xbmcgui.WindowXML):
         self.updateTimebar()
    
     def Info(self, channel):
+        debug('Info')
         info = InfoDialog(channel)
         info.setChannel(channel)
         info.doModal()
         del info
 
     def onAction(self, action):
-        debug('Mode is: %s' % self.mode)
+        #debug('onAction')
+        #debug('Mode is: %s' % self.mode)
 
         if self.mode == MODE_TV:
             self.onActionTVMode(action)
@@ -217,6 +244,7 @@ class mTVGuide(xbmcgui.WindowXML):
             self.onActionEPGMode(action)
 
     def onActionTVMode(self, action):
+        debug('onActionTVMode')
         if action.getId() == ACTION_PAGE_UP:
             self._channelUp()
 
@@ -228,6 +256,7 @@ class mTVGuide(xbmcgui.WindowXML):
 
 
     def onActionEPGMode(self, action):
+        #debug('onActionEPGMode')
         if action.getId() in [ACTION_PARENT_DIR, KEY_NAV_BACK, ACTION_PREVIOUS_MENU]:
             self.close()
             return
@@ -237,10 +266,9 @@ class mTVGuide(xbmcgui.WindowXML):
                 self._showControl(self.C_MAIN_MOUSE_CONTROLS)
             return
 
-        elif action.getId() == ACTION_SHOW_INFO or action.getId() == 122 or action.getId() == ini_key:
+        elif action.getId() == ACTION_SHOW_INFO or action.getButtonCode() == KEY_INFO:
             if not ini_info:
                 return
-
             try:
                 controlInFocus = self.getFocus()
                 program = self._getProgramFromControl(controlInFocus)
@@ -308,6 +336,7 @@ class mTVGuide(xbmcgui.WindowXML):
 
 
     def onClick(self, controlId):
+        debug('onClick')
         if controlId in [self.C_MAIN_LOADING_CANCEL, self.C_MAIN_MOUSE_EXIT]:
             self.close()
             return
@@ -340,7 +369,9 @@ class mTVGuide(xbmcgui.WindowXML):
         if program is None:
             return
 
+        self.channelIdx = program.channel
         if ADDON.getSetting('info.osd') == "true":
+
             if not self.playChannel2(program):
                 result = self.streamingService.detectStream(program.channel)
                 if not result:
@@ -387,6 +418,7 @@ class mTVGuide(xbmcgui.WindowXML):
 
 
     def _showContextMenu(self, program):
+        debug('_showContextMenu')
         self._hideControl(self.C_MAIN_MOUSE_CONTROLS)
         d = PopupMenu(self.database, program, not program.notificationScheduled)
         d.doModal()
@@ -419,11 +451,13 @@ class mTVGuide(xbmcgui.WindowXML):
             self.close()
 
     def setFocusId(self, controlId):
+        debug('setFocusId')
         control = self.getControl(controlId)
         if control:
             self.setFocus(control)
 
     def setFocus(self, control):
+        debug('setFocus')
         debug('setFocus %d' % control.getId())
         if control in [elem.control for elem in self.controlAndProgramList]:
             debug('Focus before %s' % self.focusPoint)
@@ -437,6 +471,7 @@ class mTVGuide(xbmcgui.WindowXML):
 
 
     def onFocus(self, controlId):
+        debug('onFocus')
         try:
             controlInFocus = self.getControl(controlId)
         except Exception:
@@ -466,6 +501,7 @@ class mTVGuide(xbmcgui.WindowXML):
 
 
     def _left(self, currentFocus):
+        debug('_left')
         control = self._findControlOnLeft(currentFocus)
         if control is not None:
             self.setFocus(control)
@@ -475,6 +511,7 @@ class mTVGuide(xbmcgui.WindowXML):
             self.onRedrawEPG(self.channelIdx, self.viewStartDate, focusFunction=self._findControlOnLeft)
 
     def _right(self, currentFocus):
+        debug('_right')
         control = self._findControlOnRight(currentFocus)
         if control is not None:
             self.setFocus(control)
@@ -484,6 +521,7 @@ class mTVGuide(xbmcgui.WindowXML):
             self.onRedrawEPG(self.channelIdx, self.viewStartDate, focusFunction=self._findControlOnRight)
 
     def _up(self, currentFocus):
+        debug('_up')
         currentFocus.x = self.focusPoint.x
         control = self._findControlAbove(currentFocus)
         if control is not None:
@@ -493,6 +531,7 @@ class mTVGuide(xbmcgui.WindowXML):
             self.onRedrawEPG(self.channelIdx - CHANNELS_PER_PAGE, self.viewStartDate, focusFunction=self._findControlAbove)
 
     def _down(self, currentFocus):
+        debug('_down')
         currentFocus.x = self.focusPoint.x
         control = self._findControlBelow(currentFocus)
         if control is not None:
@@ -502,14 +541,17 @@ class mTVGuide(xbmcgui.WindowXML):
             self.onRedrawEPG(self.channelIdx + CHANNELS_PER_PAGE, self.viewStartDate, focusFunction=self._findControlBelow)
 
     def _nextDay(self):
+        debug('_nextDay')
         self.viewStartDate += datetime.timedelta(days = 1)
         self.onRedrawEPG(self.channelIdx, self.viewStartDate)
 
     def _previousDay(self):
+        debug('_previousDay')
         self.viewStartDate -= datetime.timedelta(days = 1)
         self.onRedrawEPG(self.channelIdx, self.viewStartDate)
 
     def _moveUp(self, count = 1, scrollEvent = False):
+        debug('_moveUp')
         if scrollEvent:
             self.onRedrawEPG(self.channelIdx - count, self.viewStartDate)
         else:
@@ -517,6 +559,7 @@ class mTVGuide(xbmcgui.WindowXML):
             self.onRedrawEPG(self.channelIdx - count, self.viewStartDate, focusFunction = self._findControlAbove)
 
     def _moveDown(self, count = 1, scrollEvent = False):
+        debug('_moveDown')
         if scrollEvent:
             self.onRedrawEPG(self.channelIdx + count, self.viewStartDate)
         else:
@@ -524,15 +567,17 @@ class mTVGuide(xbmcgui.WindowXML):
             self.onRedrawEPG(self.channelIdx + count, self.viewStartDate, focusFunction=self._findControlBelow)
 
     def _channelUp(self):
+        debug('_channelUp')
         channel = self.database.getNextChannel(self.currentChannel)
         self.playChannel(channel)
 
     def _channelDown(self):
+        debug('_channelDown')
         channel = self.database.getPreviousChannel(self.currentChannel)
         self.playChannel(channel)
 
     def playChannel2(self, program):
-
+        debug('playChannel2')
         self.program = program
         self.currentChannel = program.channel
         url = self.database.getStreamUrl(program.channel)
@@ -557,6 +602,7 @@ class mTVGuide(xbmcgui.WindowXML):
 
 
     def playChannel(self, channel):
+        debug('playChannel')
         self.currentChannel = channel
         wasPlaying = self.player.isPlaying()
         url = self.database.getStreamUrl(channel)
@@ -590,6 +636,7 @@ class mTVGuide(xbmcgui.WindowXML):
         return url is not None
 
     def waitForPlayBackStopped(self):
+        debug('waitForPlayBackStopped')
         for retry in range(0, 100):
             time.sleep(0.1)
             if self.player.isPlaying():
@@ -601,11 +648,14 @@ class mTVGuide(xbmcgui.WindowXML):
         self.onPlayBackStopped()
 
     def _hideEpg(self):
+        debug('_hideEpg')
         self._hideControl(self.C_MAIN_EPG)
         self.mode = MODE_TV
         self._clearEpg()
 
     def onRedrawEPG(self, channelStart, startTime, focusFunction = None):
+        xbmc.log('redrawagain 3 channel %s' % channelStart)
+        debug('onRedrawEPG')
         if self.redrawingEPG or (self.database is not None and self.database.updateInProgress) or self.isClosing:
             debug('onRedrawEPG - already redrawing')
             return # ignore redraw request while redrawing
@@ -758,6 +808,7 @@ class mTVGuide(xbmcgui.WindowXML):
             self.onRedrawEPG(self.channelIdx, self.viewStartDate)
 
     def _clearEpg(self):
+        debug('_clearEpg')
         controls = [elem.control for elem in self.controlAndProgramList]
         try:
             self.removeControls(controls)
@@ -770,26 +821,31 @@ class mTVGuide(xbmcgui.WindowXML):
         del self.controlAndProgramList[:]
 
     def onEPGLoadError(self):
+        debug('')
         self.redrawingEPG = False
         self._hideControl(self.C_MAIN_LOADING)
         xbmcgui.Dialog().ok(strings(LOAD_ERROR_TITLE), strings(LOAD_ERROR_LINE1), strings(LOAD_ERROR_LINE2))
         self.close()
 
     def onSourceNotConfigured(self):
+        debug('onSourceNotConfigured')
         self.redrawingEPG = False
         self._hideControl(self.C_MAIN_LOADING)
         xbmcgui.Dialog().ok(strings(LOAD_ERROR_TITLE), strings(LOAD_ERROR_LINE1), strings(CONFIGURATION_ERROR_LINE2))
         self.close()
 
     def isSourceInitializationCancelled(self):
+        debug('isSourceInitializationCancelled')
         return xbmc.abortRequested or self.isClosing
 
     def onSourceInitialized(self, success):
+        debug('onSourceInitialized')
         if success:
             self.notification = Notification(self.database, ADDON.getAddonInfo('path'))
             self.onRedrawEPG(0, self.viewStartDate)
 
     def onSourceProgressUpdate(self, percentageComplete):
+        debug('onSourceProgressUpdate')
         control = self.getControl(self.C_MAIN_LOADING_PROGRESS)
         if percentageComplete < 1:
             if control:
@@ -813,15 +869,18 @@ class mTVGuide(xbmcgui.WindowXML):
         return not xbmc.abortRequested and not self.isClosing
 
     def onPlayBackStopped(self):
+        debug('onPlayBackStopped')
         if not self.player.isPlaying() and not self.isClosing:
             self.viewStartDate = datetime.datetime.today()
             self.viewStartDate -= datetime.timedelta(minutes = self.viewStartDate.minute % 30, seconds = self.viewStartDate.second)
             self.onRedrawEPG(self.channelIdx, self.viewStartDate)
 
     def _secondsToXposition(self, seconds):
+        #debug('_secondsToXposition')
         return self.epgView.left + (seconds * self.epgView.width / 7200)
 
     def _findControlOnRight(self, point):
+        debug('_findControlOnRight')
         distanceToNearest = 10000
         nearestControl = None
 
@@ -841,6 +900,7 @@ class mTVGuide(xbmcgui.WindowXML):
 
 
     def _findControlOnLeft(self, point):
+        debug('_findControlOnLeft')
         distanceToNearest = 10000
         nearestControl = None
 
@@ -859,6 +919,7 @@ class mTVGuide(xbmcgui.WindowXML):
         return nearestControl
 
     def _findControlBelow(self, point):
+        debug('_findControlBelow')
         nearestControl = None
 
         for elem in self.controlAndProgramList:
@@ -875,6 +936,7 @@ class mTVGuide(xbmcgui.WindowXML):
         return nearestControl
 
     def _findControlAbove(self, point):
+        debug('_findControlAbove')
         nearestControl = None
         for elem in self.controlAndProgramList:
             control = elem.control
@@ -890,6 +952,7 @@ class mTVGuide(xbmcgui.WindowXML):
         return nearestControl
 
     def _findControlAt(self, point):
+        debug('_findControlAt')
         for elem in self.controlAndProgramList:
             control = elem.control
             (left, top) = control.getPosition()
@@ -903,12 +966,14 @@ class mTVGuide(xbmcgui.WindowXML):
 
 
     def _getProgramFromControl(self, control):
+        debug('_getProgramFromControl')
         for elem in self.controlAndProgramList:
             if elem.control == control:
                 return elem.program
         return None
 
     def _hideControl(self, *controlIds):
+        debug('_hideControl')
         """
         Visibility is inverted in skin
         """
@@ -918,6 +983,7 @@ class mTVGuide(xbmcgui.WindowXML):
                 control.setVisible(True)
 
     def _showControl(self, *controlIds):
+        debug('_showControl')
         """
         Visibility is inverted in skin
         """
@@ -927,30 +993,36 @@ class mTVGuide(xbmcgui.WindowXML):
                 control.setVisible(False)
 
     def formatTime(self, timestamp):
+        debug('formatTime')
         format = xbmc.getRegion('time').replace(':%S', '').replace('%H%H', '%H')
         return timestamp.strftime(format)
 
     def formatDate(self, timestamp):
+        debug('formatDate')
         format = xbmc.getRegion('dateshort')
         return timestamp.strftime(format)
 
     def setControlImage(self, controlId, image):
+        debug('setControlImage')
         control = self.getControl(controlId)
         if control:
             control.setImage(image)
 
     def setControlLabel(self, controlId, label):
+        debug('setControlLabel')
         control = self.getControl(controlId)
         if control:
             control.setLabel(label)
 
     def setControlText(self, controlId, text):
+        debug('setControlText')
         control = self.getControl(controlId)
         if control:
             control.setText(text)
 
 
     def updateTimebar(self, scheduleTimer = True):
+        #debug('updateTimebar')
         try:
             # move timebar to current time
             timeDelta = datetime.datetime.today() - self.viewStartDate
@@ -1475,12 +1547,10 @@ class InfoDialog(xbmcgui.WindowXMLDialog):
 
 
     def onAction(self, action):
-        if action.getId() == ACTION_SHOW_INFO or action.getId() == 122 or action.getId() == ini_key:
+        if action.getId() == ACTION_SHOW_INFO or action.getButtonCode() == KEY_INFO:
             self.close()
 
 
-ACTION_ENTER = 7
-ACTION_ZURUECK = 10
 
 class Pla(xbmcgui.WindowDialog):
 
@@ -1494,30 +1564,33 @@ class Pla(xbmcgui.WindowDialog):
 
     def __init__(self, program, database, url, epg):
         self.epg = epg
+        self.url = url
         self.program = program
         self.database = database
         self.controlAndProgramList = list()
-        if url[0:9] == 'plugin://':
-            xbmc.executebuiltin('XBMC.RunPlugin(%s)' % url)
-        elif url[0:7] == 'service':
-            xbmc.executebuiltin('XBMC.RunScript(script.bmtvguide,%s,0)' % url)
-        else:
-            xbmc.Player().play(url)
+        self.play(url)
 
     def onAction(self, action):
-        if action == ACTION_ZURUECK:
+        if action.getId() == ACTION_PREVIOUS_MENU or action.getId() == ACTION_STOP or action.getButtonCode() == KEY_STOP:
             xbmc.Player().stop()
             self.close()
 
-        if action.getId() == ACTION_SHOW_INFO or action.getId() == 122 or action.getId() == ini_key:
+        if action.getId() == ACTION_SHOW_INFO or action.getButtonCode() == KEY_INFO:
             try:
                 if self.program is not None:
                     self.epg.Info(self.program)
             except:
                 pass
             return
-        if action.getId() == ACTION_PAGE_UP:
+        if action.getId() == ACTION_PAGE_UP or action.getButtonCode() == KEY_PP:
             self.epg._channelUp()
 
-        if action.getId() == ACTION_PAGE_DOWN:
+        if action.getId() == ACTION_PAGE_DOWN or action.getButtonCode() == KEY_PM:
             self.epg._channelDown()
+
+
+
+
+
+
+
