@@ -415,6 +415,11 @@ class Database(object):
 
         return [channelStart, channelsOnPage, programs]
 
+    def getCurrentChannelIdx(self, currentChannel):
+        channels = self.getChannelList()
+        idx = channels.index(currentChannel)
+        return idx
+
 
     def getNextChannel(self, currentChannel):
         channels = self.getChannelList()

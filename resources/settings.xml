@@ -24,6 +24,7 @@
 		<setting label="30950" type="action" action="RunScript($CWD/cleardb.py)" />
 		<setting label="Ustaw klawisze" type="action" action="RunScript($CWD/setkey.py)" />
 		<setting id="info.osd" label="INFO OSD" type="bool" default="false" />
+		<setting label="Test klawiszy" type="action" action="RunScript($CWD/setkey2.py)" />
     </category>
 
 

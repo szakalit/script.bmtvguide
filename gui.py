@@ -477,7 +477,7 @@ class mTVGuide(xbmcgui.WindowXML):
 
 
     def onFocus(self, controlId):
-        debug('onFocus')
+        debug('onFocus controlId : %s' % controlId)
         try:
             controlInFocus = self.getControl(controlId)
         except Exception:
@@ -573,14 +573,12 @@ class mTVGuide(xbmcgui.WindowXML):
             self.onRedrawEPG(self.channelIdx + count, self.viewStartDate, focusFunction=self._findControlBelow)
 
     def _channelUp(self):
-        debug('_channelUp')
         channel = self.database.getNextChannel(self.currentChannel)
-        self.playChannel(channel)
+        self.playChannel2(self.database.getCurrentProgram(channel))
 
     def _channelDown(self):
-        debug('_channelDown')
         channel = self.database.getPreviousChannel(self.currentChannel)
-        self.playChannel(channel)
+        self.playChannel2(self.database.getCurrentProgram(channel))
 
     def playChannel2(self, program):
         debug('playChannel2')
@@ -598,11 +596,14 @@ class mTVGuide(xbmcgui.WindowXML):
                         url = content.strip()
                 except:
                     pass
-            
             lo = Pla(self.program, self.database, url, self)
             lo.doModal()
             lo.close()
             del lo
+            if not self.player.isPlaying() and not self.isClosing:
+                self.viewStartDate = datetime.datetime.today()
+                self.viewStartDate -= datetime.timedelta(minutes = self.viewStartDate.minute % 30, seconds = self.viewStartDate.second)
+                self.onRedrawEPG(self.database.getCurrentChannelIdx(self.currentChannel), self.viewStartDate)
         #self.onPlayBackStopped()
         return url is not None
 
@@ -623,7 +624,7 @@ class mTVGuide(xbmcgui.WindowXML):
                         url = content.strip()
                 except:
                     pass
-            
+
             if url[0:9] == 'plugin://':
                 xbmc.executebuiltin('XBMC.RunPlugin(%s)' % url)
             elif url[0:7] == 'service':
@@ -637,7 +638,7 @@ class mTVGuide(xbmcgui.WindowXML):
                 self._hideEpg()
 
         threading.Timer(1, self.waitForPlayBackStopped).start()
-        
+
 
         return url is not None
 
@@ -677,7 +678,6 @@ class mTVGuide(xbmcgui.WindowXML):
 
         # remove existing controls
         self._clearEpg()
-
         try:
             self.channelIdx, channels, programs = self.database.getEPGView(channelStart, startTime, self.onSourceProgressUpdate, clearExistingProgramList = True)
         except src.SourceException:
@@ -697,7 +697,7 @@ class mTVGuide(xbmcgui.WindowXML):
         # set channel logo or text
         for idx in range(0, CHANNELS_PER_PAGE):
             if idx >= len(channels):
-                self.setControlImage(4110 + idx, '')
+                self.setControlImage(4110 + idx, ' ')
                 self.setControlLabel(4010 + idx, '')
             else:
                 channel = channels[idx]
@@ -706,7 +706,6 @@ class mTVGuide(xbmcgui.WindowXML):
                     self.setControlImage(4110 + idx, channel.logo)
                 else:
                     self.setControlImage(4110 + idx, '')
-
         for program in programs:
             idx = channels.index(program.channel)
 
@@ -791,7 +790,6 @@ class mTVGuide(xbmcgui.WindowXML):
                 self.controlAndProgramList.append(ControlAndProgram(control, program))
 
         # add program controls
-        debug("focusFunction is None")
         if focusFunction is None:
             focusFunction = self._findControlAt
         focusControl = focusFunction(self.focusPoint)
@@ -1571,9 +1569,11 @@ class Pla(xbmcgui.WindowDialog):
         self.epg = epg
         self.url = url
         self.program = program
+        self.currentChannel = program.channel
         self.database = database
         self.controlAndProgramList = list()
         self.play(url)
+        self.ChannelChanged = 0
 
     def onAction(self, action):
         #if action.getId() == ACTION_PREVIOUS_MENU or action.getId() == ACTION_STOP or (action.getButtonCode() == KEY_STOP and KEY_STOP != 0):
@@ -1583,17 +1583,20 @@ class Pla(xbmcgui.WindowDialog):
 
         if action.getId() == ACTION_SHOW_INFO or (action.getButtonCode() == KEY_INFO and KEY_INFO != 0):
             try:
-                self.program = self.database.getCurrentProgram(self.epg.currentChannel)
+                self.program = self.database.getCurrentProgram(self.currentChannel)
                 self.epg.Info(self.program)
             except:
                 pass
             return
         if action.getId() == ACTION_PAGE_UP or (action.getButtonCode() == KEY_PP and KEY_PP != 0):
-            self.epg._channelUp()
+            #self.epg._channelUp()
+            self.ChannelChanged = 1
+            self._channelUp()
 
         if action.getId() == ACTION_PAGE_DOWN or (action.getButtonCode() == KEY_PM and KEY_PM != 0):
-            self.epg._channelDown()
-
+            #self.epg._channelDown()
+            self.ChannelChanged = 1
+            self._channelDown()
 
     def onPlayBackStopped(self):
         xbmc.Player().stop()
@@ -1601,13 +1604,55 @@ class Pla(xbmcgui.WindowDialog):
 
 
     def waitForPlayBackStopped(self):
-        for retry in range(0, 100):
+        self.wait = True
+        for retry in range(0, 50):
             time.sleep(0.1)
             if xbmc.Player().isPlaying():
                 break
 
-        while xbmc.Player().isPlaying() and not xbmc.abortRequested:
-            time.sleep(0.5)
+        while self.wait == True:
+            if xbmc.Player().isPlaying() and not xbmc.abortRequested:
+                time.sleep(0.2)
+            else:
+                if self.ChannelChanged == 1:
+                    for retry in range(0, 10):
+                        time.sleep(0.1)
+                    self.ChannelChanged = 0
+                else:
+                    self.wait = False
+
 
         self.onPlayBackStopped()
+
+
+    def _channelUp(self):
+        channel = self.database.getNextChannel(self.currentChannel)
+        self.playChannel(channel)
+
+    def _channelDown(self):
+        channel = self.database.getPreviousChannel(self.currentChannel)
+        self.playChannel(channel)
+
+    def playChannel(self, channel):
+        self.currentChannel = channel
+        self.epg.currentChannel = channel
+        url = self.database.getStreamUrl(channel)
+        if url:
+            if url[-5:] == '.strm':
+                try:
+                    f = open(url)
+                    content = f.read()
+                    f.close()
+                    
+                    if content[0:9] == 'plugin://':
+                        url = content.strip()
+                except:
+                    pass
+        if url[0:9] == 'plugin://':
+            xbmc.executebuiltin('XBMC.RunPlugin(%s)' % url)
+        elif url[0:7] == 'service':
+            xbmc.executebuiltin('XBMC.RunScript(script.bmtvguide,%s,0)' % url)
+        else:
+            xbmc.Player().play(url)
+
 
