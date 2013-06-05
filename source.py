@@ -1,4 +1,6 @@
 #
+#      Copyright (C) 2013 Szakalit
+#
 #      Copyright (C) 2013 Tommy Winther
 #      http://tommy.winther.nu
 #
@@ -131,13 +133,10 @@ class Database(object):
 
             command = event[0]
             callback = event[1]
-
             print 'Database.eventLoop() >>>>>>>>>> processing command: ' + command.__name__
-
             try:
                 result = command(*event[2:])
                 self.eventResults[command.__name__] = result
-
                 if callback:
                     if self._initialize == command:
                         threading.Thread(name='Database callback', target=callback, args=[result]).start()
@@ -476,12 +475,9 @@ class Database(object):
         return self._invokeAndBlockForResult(self._getCurrentProgram, channel)
 
     def _getCurrentProgram(self, channel):
-        """
+        sqlite3.register_adapter(datetime.datetime, self.adapt_datetime)
+        sqlite3.register_converter('timestamp', self.convert_datetime)
 
-        @param channel:
-        @type channel: source.Channel
-        @return:
-        """
         program = None
         now = datetime.datetime.now()
         c = self.conn.cursor()
@@ -490,7 +486,6 @@ class Database(object):
         if row:
             program = Program(channel, row['title'], row['start_date'], row['end_date'], row['description'], row['image_large'], row['image_small'], row['categoryA'], row['categoryB'])
         c.close()
-
         return program
 
     def getNextProgram(self, channel):

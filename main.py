@@ -225,7 +225,6 @@ class InitPlayer:
         dataInfo = { 'title': '', 'image': '', 'bitrate': '' }
         try:
             channelsArray = chan.getJsonFromAPI(apiUrl)
-            print(channelsArray)
             for v,k in channelsArray.items():
                 if int(channel) == int(k['cid']):
                     cid = k['cid']
@@ -234,7 +233,7 @@ class InitPlayer:
                     img = k['channel_image']
                     image = iconUrl + "no_video.png"
                     if img == '1':
-						image = iconUrl + cid + ".jpg"
+                        image = iconUrl + cid + ".jpg"
                     dataInfo = { 'title': title, 'image': image, 'bitrate': bitrate }
                     break
         except TypeError, typerr:

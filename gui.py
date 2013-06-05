@@ -98,6 +98,11 @@ HALF_HOUR = datetime.timedelta(minutes = 30)
 def debug(s):
     if DEBUG: xbmc.log("******************************************************************* " + str(s), xbmc.LOGDEBUG)
 
+def deb(s):
+    xbmc.log("*******>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    xbmc.log("*******>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + str(s))
+    xbmc.log("*******>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+
 class Point(object):
     def __init__(self):
         self.x = self.y = 0
@@ -195,8 +200,9 @@ class mTVGuide(xbmcgui.WindowXML):
             self.redrawagain = True
             debug('redrawagain')
             #if self.redrawingEPG == False:
-            #    xbmc.log('redrawagain 2 channel %s' % self.channelIdx )
-            #    self.onRedrawEPG(self.channelIdx, self.viewStartDate)
+                #self.redrawagain = False
+                #xbmc.log('redrawagain 2 channel %s' % self.channelIdx )
+                #self.onRedrawEPG(self.channelIdx, self.viewStartDate)
 
 
             return
@@ -227,10 +233,10 @@ class mTVGuide(xbmcgui.WindowXML):
         self.database.initialize(self.onSourceInitialized, self.isSourceInitializationCancelled)
         self.updateTimebar()
    
-    def Info(self, channel):
+    def Info(self, program):
         debug('Info')
-        info = InfoDialog(channel)
-        info.setChannel(channel)
+        info = InfoDialog(program)
+        info.setChannel(program)
         info.doModal()
         del info
 
@@ -266,7 +272,7 @@ class mTVGuide(xbmcgui.WindowXML):
                 self._showControl(self.C_MAIN_MOUSE_CONTROLS)
             return
 
-        elif action.getId() == ACTION_SHOW_INFO or action.getButtonCode() == KEY_INFO:
+        elif action.getId() == ACTION_SHOW_INFO or (action.getButtonCode() == KEY_INFO and KEY_INFO != 0):
             if not ini_info:
                 return
             try:
@@ -369,7 +375,7 @@ class mTVGuide(xbmcgui.WindowXML):
         if program is None:
             return
 
-        self.channelIdx = program.channel
+        #self.channelIdx = program.channel
         if ADDON.getSetting('info.osd') == "true":
 
             if not self.playChannel2(program):
@@ -481,7 +487,7 @@ class mTVGuide(xbmcgui.WindowXML):
         if program is None:
             return
 
-        self.setControlLabel(self.C_MAIN_TITLE, '[B]%s[/B]' % program.title)
+        self.setControlLabel(self.C_MAIN_TITLE, '[B]%s[/B]   %s' % (program.title, controlId))
         self.setControlLabel(self.C_MAIN_TIME, '[B]%s - %s[/B]' % (self.formatTime(program.startDate), self.formatTime(program.endDate)))
         if program.description:
             description = program.description
@@ -597,7 +603,7 @@ class mTVGuide(xbmcgui.WindowXML):
             lo.doModal()
             lo.close()
             del lo
-
+        #self.onPlayBackStopped()
         return url is not None
 
 
@@ -654,12 +660,10 @@ class mTVGuide(xbmcgui.WindowXML):
         self._clearEpg()
 
     def onRedrawEPG(self, channelStart, startTime, focusFunction = None):
-        xbmc.log('redrawagain 3 channel %s' % channelStart)
         debug('onRedrawEPG')
         if self.redrawingEPG or (self.database is not None and self.database.updateInProgress) or self.isClosing:
             debug('onRedrawEPG - already redrawing')
             return # ignore redraw request while redrawing
-        debug('onRedrawEPG')
 
         self.redrawingEPG = True
         self.mode = MODE_EPG
@@ -787,6 +791,7 @@ class mTVGuide(xbmcgui.WindowXML):
                 self.controlAndProgramList.append(ControlAndProgram(control, program))
 
         # add program controls
+        debug("focusFunction is None")
         if focusFunction is None:
             focusFunction = self._findControlAt
         focusControl = focusFunction(self.focusPoint)
@@ -795,17 +800,14 @@ class mTVGuide(xbmcgui.WindowXML):
         if focusControl is not None:
             debug('onRedrawEPG - setFocus %d' % focusControl.getId())
             self.setFocus(focusControl)
-
         self.ignoreMissingControlIds.extend([elem.control.getId() for elem in self.controlAndProgramList])
-
         if focusControl is None and len(self.controlAndProgramList) > 0:
             self.setFocus(self.controlAndProgramList[0].control)
-
         self._hideControl(self.C_MAIN_LOADING)
         self.redrawingEPG = False
         if self.redrawagain:
             self.redrawagain = False
-            self.onRedrawEPG(self.channelIdx, self.viewStartDate)
+            self.onRedrawEPG(channelStart, self.viewStartDate, focusFunction)
 
     def _clearEpg(self):
         debug('_clearEpg')
@@ -1547,7 +1549,7 @@ class InfoDialog(xbmcgui.WindowXMLDialog):
 
 
     def onAction(self, action):
-        if action.getId() == ACTION_SHOW_INFO or action.getButtonCode() == KEY_INFO:
+        if action.getId() == ACTION_SHOW_INFO or (action.getButtonCode() == KEY_INFO and KEY_INFO != 0):
             self.close()
 
 
@@ -1562,6 +1564,9 @@ class Pla(xbmcgui.WindowDialog):
         else:
             xbmc.Player().play(url)
 
+        threading.Timer(1, self.waitForPlayBackStopped).start()
+
+
     def __init__(self, program, database, url, epg):
         self.epg = epg
         self.url = url
@@ -1571,26 +1576,38 @@ class Pla(xbmcgui.WindowDialog):
         self.play(url)
 
     def onAction(self, action):
-        if action.getId() == ACTION_PREVIOUS_MENU or action.getId() == ACTION_STOP or action.getButtonCode() == KEY_STOP:
+        #if action.getId() == ACTION_PREVIOUS_MENU or action.getId() == ACTION_STOP or (action.getButtonCode() == KEY_STOP and KEY_STOP != 0):
+        if action.getId() == ACTION_PREVIOUS_MENU:
             xbmc.Player().stop()
             self.close()
 
-        if action.getId() == ACTION_SHOW_INFO or action.getButtonCode() == KEY_INFO:
+        if action.getId() == ACTION_SHOW_INFO or (action.getButtonCode() == KEY_INFO and KEY_INFO != 0):
             try:
-                if self.program is not None:
-                    self.epg.Info(self.program)
+                self.program = self.database.getCurrentProgram(self.epg.currentChannel)
+                self.epg.Info(self.program)
             except:
                 pass
             return
-        if action.getId() == ACTION_PAGE_UP or action.getButtonCode() == KEY_PP:
+        if action.getId() == ACTION_PAGE_UP or (action.getButtonCode() == KEY_PP and KEY_PP != 0):
             self.epg._channelUp()
 
-        if action.getId() == ACTION_PAGE_DOWN or action.getButtonCode() == KEY_PM:
+        if action.getId() == ACTION_PAGE_DOWN or (action.getButtonCode() == KEY_PM and KEY_PM != 0):
             self.epg._channelDown()
 
 
+    def onPlayBackStopped(self):
+        xbmc.Player().stop()
+        self.close()
 
 
+    def waitForPlayBackStopped(self):
+        for retry in range(0, 100):
+            time.sleep(0.1)
+            if xbmc.Player().isPlaying():
+                break
 
+        while xbmc.Player().isPlaying() and not xbmc.abortRequested:
+            time.sleep(0.5)
 
+        self.onPlayBackStopped()
 
