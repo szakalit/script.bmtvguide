@@ -33,6 +33,8 @@ from notification import Notification
 from strings import *
 import re, sys, os
 import streaming
+import vosd
+from vosd import VideoOSD
 
 DEBUG = False
 
@@ -162,7 +164,9 @@ class mTVGuide(xbmcgui.WindowXML):
         self.database = None
         self.redrawagain = False
         self.info = False
-		
+        self.oldchan = 0
+
+
         self.mode = MODE_EPG
         self.currentChannel = None
 
@@ -585,6 +589,7 @@ class mTVGuide(xbmcgui.WindowXML):
         self.program = program
         self.currentChannel = program.channel
         url = self.database.getStreamUrl(program.channel)
+        self.oldchan = self.database.getCurrentChannelIdx(program.channel)
         if url:
             if url[-5:] == '.strm':
                 try:
@@ -600,10 +605,11 @@ class mTVGuide(xbmcgui.WindowXML):
             lo.doModal()
             lo.close()
             del lo
-            if not self.player.isPlaying() and not self.isClosing:
-                self.viewStartDate = datetime.datetime.today()
-                self.viewStartDate -= datetime.timedelta(minutes = self.viewStartDate.minute % 30, seconds = self.viewStartDate.second)
-                self.onRedrawEPG(self.database.getCurrentChannelIdx(self.currentChannel), self.viewStartDate)
+            if self.oldchan != self.database.getCurrentChannelIdx(self.currentChannel):
+                if not self.player.isPlaying() and not self.isClosing:
+                    self.viewStartDate = datetime.datetime.today()
+                    self.viewStartDate -= datetime.timedelta(minutes = self.viewStartDate.minute % 30, seconds = self.viewStartDate.second)
+                    self.onRedrawEPG(self.database.getCurrentChannelIdx(self.currentChannel), self.viewStartDate)
         #self.onPlayBackStopped()
         return url is not None
 
@@ -698,14 +704,14 @@ class mTVGuide(xbmcgui.WindowXML):
         for idx in range(0, CHANNELS_PER_PAGE):
             if idx >= len(channels):
                 self.setControlImage(4110 + idx, ' ')
-                self.setControlLabel(4010 + idx, '')
+                self.setControlLabel(4010 + idx, ' ')
             else:
                 channel = channels[idx]
                 self.setControlLabel(4010 + idx, channel.title)
                 if channel.logo is not None:
                     self.setControlImage(4110 + idx, channel.logo)
                 else:
-                    self.setControlImage(4110 + idx, '')
+                    self.setControlImage(4110 + idx, ' ')
         for program in programs:
             idx = channels.index(program.channel)
 
@@ -1006,7 +1012,7 @@ class mTVGuide(xbmcgui.WindowXML):
         debug('setControlImage')
         control = self.getControl(controlId)
         if control:
-            control.setImage(image)
+            control.setImage(image.encode('utf-8'))
 
     def setControlLabel(self, controlId, label):
         debug('setControlLabel')
@@ -1484,7 +1490,7 @@ class ChooseStreamAddonDialog(xbmcgui.WindowXMLDialog):
 class InfoDialog(xbmcgui.WindowXMLDialog):
 
     def __new__(cls, program ):
-        return super(InfoDialog, cls).__new__(cls, 'DialogInfo.xml', ADDON.getAddonInfo('path'), ADDON.getSetting('Skin'), "720p")
+        return super(InfoDialog, cls).__new__(cls, 'DialogInfo.xml', ADDON.getAddonInfo('path'), "Default", "720p")
 
     def __init__(self, program):
         super(InfoDialog, self).__init__()
@@ -1552,7 +1558,12 @@ class InfoDialog(xbmcgui.WindowXMLDialog):
 
 
 
-class Pla(xbmcgui.WindowDialog):
+class Pla(xbmcgui.WindowXMLDialog):
+
+    def __new__(cls, program, database, url, epg):
+        return super(Pla, cls).__new__(cls, 'Vid.xml', ADDON.getAddonInfo('path'), "Default", "720p")
+
+
 
     def play(self, url):
         if url[0:9] == 'plugin://':
@@ -1566,6 +1577,7 @@ class Pla(xbmcgui.WindowDialog):
 
 
     def __init__(self, program, database, url, epg):
+        super(Pla, self).__init__()
         self.epg = epg
         self.url = url
         self.program = program
@@ -1574,10 +1586,10 @@ class Pla(xbmcgui.WindowDialog):
         self.controlAndProgramList = list()
         self.play(url)
         self.ChannelChanged = 0
+        self.mouseCount = 0
 
     def onAction(self, action):
-        #if action.getId() == ACTION_PREVIOUS_MENU or action.getId() == ACTION_STOP or (action.getButtonCode() == KEY_STOP and KEY_STOP != 0):
-        if action.getId() == ACTION_PREVIOUS_MENU:
+        if action.getId() == ACTION_PREVIOUS_MENU or action.getId() == ACTION_STOP or (action.getButtonCode() == KEY_STOP and KEY_STOP != 0):
             xbmc.Player().stop()
             self.close()
 
@@ -1589,14 +1601,45 @@ class Pla(xbmcgui.WindowDialog):
                 pass
             return
         if action.getId() == ACTION_PAGE_UP or (action.getButtonCode() == KEY_PP and KEY_PP != 0):
-            #self.epg._channelUp()
             self.ChannelChanged = 1
             self._channelUp()
 
         if action.getId() == ACTION_PAGE_DOWN or (action.getButtonCode() == KEY_PM and KEY_PM != 0):
-            #self.epg._channelDown()
             self.ChannelChanged = 1
             self._channelDown()
+
+
+        if action.getId() == ACTION_MOUSE_MOVE and xbmc.Player().isPlaying():
+            self.mouseCount = self.mouseCount + 1
+            if self.mouseCount > 5:
+                self.mouseCount = 0
+                osd = VideoOSD(self)
+                osd.doModal()
+                del osd
+
+
+    def onAction2(self, action):
+        if action == ACTION_STOP:
+            xbmc.Player().stop()
+            self.close()
+        if action == ACTION_SHOW_INFO:
+            try:
+                self.program = self.database.getCurrentProgram(self.currentChannel)
+                self.epg.Info(self.program)
+            except:
+                pass
+            return
+        if action == ACTION_PAGE_UP:
+            self.ChannelChanged = 1
+            self._channelUp()
+
+        if action == ACTION_PAGE_DOWN:
+            self.ChannelChanged = 1
+            self._channelDown()
+
+
+
+#        
 
     def onPlayBackStopped(self):
         xbmc.Player().stop()
@@ -1654,5 +1697,8 @@ class Pla(xbmcgui.WindowDialog):
             xbmc.executebuiltin('XBMC.RunScript(script.bmtvguide,%s,0)' % url)
         else:
             xbmc.Player().play(url)
+
+
+
 
 

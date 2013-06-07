@@ -41,7 +41,7 @@ import streaming
 class KeyListener(WindowXMLDialog):
 
   def __new__(cls):
-    return super(KeyListener, cls).__new__(cls, 'DialogSetKey.xml', ADDON.getAddonInfo('path'), ADDON.getSetting('Skin'), "720p")
+    return super(KeyListener, cls).__new__(cls, 'DialogSetKey.xml', ADDON.getAddonInfo('path'), "Default", "720p")
   
   def onInit(self):
     self.key = 0
