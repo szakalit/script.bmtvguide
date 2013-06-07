@@ -61,7 +61,10 @@ class KeyListener(WindowXMLDialog):
 
     else:
        self.key = action.getButtonCode()
-       
+       if self.key == 0:
+            self.key = action.getId()
+
+
        if self.a_info == 1 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0:
           ADDON.setSetting(id="info_key", value=str(self.key))
           self.getControl(7001).setLabel(str(self.key))
