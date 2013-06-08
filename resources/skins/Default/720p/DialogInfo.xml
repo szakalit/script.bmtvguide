@@ -1,5 +1,5 @@
 <window>
-	<defaultcontrol always="true">18</defaultcontrol>
+	<defaultcontrol always="true">1000</defaultcontrol>
 	<coordinates>
 		<system>1</system>
 		<posx>185</posx>
@@ -38,6 +38,23 @@
 				<textcolor>selected</textcolor>
 				<shadowcolor>black</shadowcolor>
 			</control>
+
+		<control type="button" id="1000">
+			<description>Close Window button</description>
+			<posx>830</posx>
+			<posy>15</posy>
+			<width>64</width>
+			<height>32</height>
+			<label>-</label>
+			<font>-</font>
+			<onclick>Dialog.Close(VideoOSD,true)</onclick>
+			<onclick>FullScreen</onclick>
+			<texturefocus>DialogCloseButton-focus.png</texturefocus>
+			<texturenofocus>DialogCloseButton.png</texturenofocus>
+			<animation effect="fade" time="200">VisibleChange</animation>
+			<visible>true</visible>
+		</control>
+
 			<control type="label" id="4920">
                 <description>Program title</description>
                 <posx>30</posx>

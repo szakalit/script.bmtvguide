@@ -276,7 +276,7 @@ class mTVGuide(xbmcgui.WindowXML):
                 self._showControl(self.C_MAIN_MOUSE_CONTROLS)
             return
 
-        elif action.getId() == ACTION_SHOW_INFO or (action.getButtonCode() == KEY_INFO and KEY_INFO != 0):
+        elif action.getId() == ACTION_SHOW_INFO or (action.getButtonCode() == KEY_INFO and KEY_INFO != 0) or (action.getId() == KEY_INFO and KEY_INFO != 0):
             if not ini_info:
                 return
             try:
@@ -491,7 +491,7 @@ class mTVGuide(xbmcgui.WindowXML):
         if program is None:
             return
 
-        self.setControlLabel(self.C_MAIN_TITLE, '[B]%s[/B]   %s' % (program.title, controlId))
+        self.setControlLabel(self.C_MAIN_TITLE, '[B]%s[/B]' % (program.title))
         self.setControlLabel(self.C_MAIN_TIME, '[B]%s - %s[/B]' % (self.formatTime(program.startDate), self.formatTime(program.endDate)))
         if program.description:
             description = program.description
@@ -1556,6 +1556,9 @@ class InfoDialog(xbmcgui.WindowXMLDialog):
         if action.getId() == ACTION_SHOW_INFO or (action.getButtonCode() == KEY_INFO and KEY_INFO != 0):
             self.close()
 
+    def onClick(self, controlId):
+        if controlId == 1000:
+            self.close()
 
 
 class Pla(xbmcgui.WindowXMLDialog):
