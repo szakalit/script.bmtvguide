@@ -88,6 +88,19 @@
 	<string id="58000">Informacje o programie</string>
 
 
+	<string id="31001">VIDEO OSD</string>
+	<string id="31002">Ustaw klawisze</string>
+	<string id="31003">USTAW</string>
+	<string id="31004">Zamknij</string>
+	<string id="31005">Klawisz HOME</string>
+	<string id="31006">Klawisz P-</string>
+	<string id="31007">Klawisz P+</string>
+	<string id="31008">Klawisz STOP</string>
+	<string id="31009">Klawisz INFO</string>
+	<string id="310010"></string>
+
+
+
 	   <!-- general settings -->
 
     <string id="55002">Użytkownik:</string>

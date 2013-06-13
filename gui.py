@@ -92,6 +92,10 @@ try:
      KEY_PM = int(ADDON.getSetting('pm_key'))
 except:
      KEY_PM = 0
+try:
+     KEY_HOME2 = int(ADDON.getSetting('home_key'))
+except:
+     KEY_HOME2 = 0
 
 CHANNELS_PER_PAGE = ini_chan
 
@@ -334,7 +338,7 @@ class mTVGuide(xbmcgui.WindowXML):
             self._moveUp(scrollEvent = True)
         elif action.getId() == ACTION_MOUSE_WHEEL_DOWN:
             self._moveDown(scrollEvent = True)
-        elif action.getId() == KEY_HOME:
+        elif action.getId() == KEY_HOME or (action.getButtonCode() == KEY_HOME2 and KEY_HOME2 != 0) or (action.getId() == KEY_HOME2 and KEY_HOME2 != 0):
             self.viewStartDate = datetime.datetime.today()
             self.viewStartDate -= datetime.timedelta(minutes = self.viewStartDate.minute % 30, seconds = self.viewStartDate.second)
             self.onRedrawEPG(self.channelIdx, self.viewStartDate)
@@ -1592,7 +1596,7 @@ class Pla(xbmcgui.WindowXMLDialog):
         self.mouseCount = 0
 
     def onAction(self, action):
-        deb(str(action.getId()))
+        #deb(str(action.getId()))
         if action.getId() == ACTION_PREVIOUS_MENU or action.getId() == ACTION_STOP or (action.getButtonCode() == KEY_STOP and KEY_STOP != 0) or (action.getId() == KEY_STOP and KEY_STOP != 0):
             xbmc.Player().stop()
             self.close()

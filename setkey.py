@@ -46,6 +46,7 @@ class KeyListener(WindowXMLDialog):
   def onInit(self):
     self.key = 0
     self.a_info = 0
+    self.a_home = 0
     self.a_stop = 0
     self.a_pp = 0
     self.a_pm = 0
@@ -53,6 +54,7 @@ class KeyListener(WindowXMLDialog):
     self.getControl(7002).setLabel(str(ADDON.getSetting('stop_key')))
     self.getControl(7003).setLabel(str(ADDON.getSetting('pp_key')))
     self.getControl(7004).setLabel(str(ADDON.getSetting('pm_key')))
+    self.getControl(7005).setLabel(str(ADDON.getSetting('home_key')))
     pass
 
   def onAction(self, action):
@@ -65,58 +67,69 @@ class KeyListener(WindowXMLDialog):
             self.key = action.getId()
 
 
-       if self.a_info == 1 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0:
+       if self.a_info == 1 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0 and self.a_home == 0:
           ADDON.setSetting(id="info_key", value=str(self.key))
           self.getControl(7001).setLabel(str(self.key))
           self.getControl(7001).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
           self.getControl(8001).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
           self.getControl(9001).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
           self.a_info = 0
-       if self.a_info == 0 and self.a_stop == 1 and self.a_pp == 0 and self.a_pm == 0:
+       if self.a_info == 0 and self.a_stop == 1 and self.a_pp == 0 and self.a_pm == 0 and self.a_home == 0:
           ADDON.setSetting(id="stop_key", value=str(self.key))
           self.getControl(7002).setLabel(str(self.key))
           self.getControl(7002).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
           self.getControl(8002).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
           self.getControl(9002).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
           self.a_stop = 0
-       if self.a_info == 0 and self.a_stop == 0 and self.a_pp == 1 and self.a_pm == 0:
+       if self.a_info == 0 and self.a_stop == 0 and self.a_pp == 1 and self.a_pm == 0 and self.a_home == 0:
           ADDON.setSetting(id="pp_key", value=str(self.key))
           self.getControl(7003).setLabel(str(self.key))
           self.getControl(7003).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
           self.getControl(8003).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
           self.getControl(9003).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
           self.a_pp = 0
-       if self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 1:
+       if self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 1 and self.a_home == 0:
           ADDON.setSetting(id="pm_key", value=str(self.key))
           self.getControl(7004).setLabel(str(self.key))
           self.getControl(7004).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
           self.getControl(8004).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
           self.getControl(9004).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
           self.a_pm = 0
-
+       if self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0 and self.a_home == 1:
+          ADDON.setSetting(id="home_key", value=str(self.key))
+          self.getControl(7005).setLabel(str(self.key))
+          self.getControl(7005).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.getControl(8005).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.getControl(9005).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=False pulse=True')])
+          self.a_home = 0
 
   def onClick(self, controlId):
-        if controlId == 9001 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0:
+        if controlId == 9001 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0 and self.a_home == 0:
             self.a_info = 1
             self.getControl(7001).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
             self.getControl(8001).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
             self.getControl(9001).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
-        if controlId == 9002 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0:
+        if controlId == 9002 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0 and self.a_home == 0:
             self.a_stop = 1
             self.getControl(7002).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
             self.getControl(8002).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
             self.getControl(9002).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
-        if controlId == 9003 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0:
+        if controlId == 9003 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0 and self.a_home == 0:
             self.a_pp = 1
             self.getControl(7003).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
             self.getControl(8003).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
             self.getControl(9003).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
-        if controlId == 9004 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0:
+        if controlId == 9004 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0 and self.a_home == 0:
             self.a_pm = 1
             self.getControl(7004).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
             self.getControl(8004).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
             self.getControl(9004).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
-        if controlId == 9099 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0:
+        if controlId == 9005 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0 and self.a_home == 0:
+            self.a_home = 1
+            self.getControl(7005).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+            self.getControl(8005).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+            self.getControl(9005).setAnimations([('Conditional', 'effect=fade start=0 end=100 time=1000 condition=True pulse=True')])
+        if controlId == 9099 and self.a_info == 0 and self.a_stop == 0 and self.a_pp == 0 and self.a_pm == 0 and self.a_home == 0:
             self.close()
 
 
