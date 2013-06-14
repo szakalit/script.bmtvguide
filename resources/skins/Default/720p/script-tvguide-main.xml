@@ -9,92 +9,79 @@
 	<controls>
 
         <control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>czarny.png</texture>
         </control>
         <control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>czerwony.png</texture>
         </control>
         <control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>default.png</texture>
         </control>		
         <control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>default-focus.png</texture>
         </control>		
 
         <control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>default-przypomnienie.png</texture>
         </control>		
         <control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>fioletowy.png</texture>
         </control>
 		<control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>niebieski.png</texture>
         </control>
 		<control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>pomaranczowy.png</texture>
         </control>
 		<control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>purpurowy.png</texture>
         </control>
 		<control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>seledynowy.png</texture>
         </control>
 		<control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>zielony.png</texture>
         </control>
 		<control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>zolty.png</texture>
         </control>
 		<control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>default.png</texture>
         </control>
             <control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>kolorowy.png</texture>
         </control>
             <control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>srebrnoszary.png</texture>
         </control>
       <control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>kolorowyciemny.png</texture>
         </control>
       <control type="image">
-            <description>workaround for texture not being loaded</description>
             <posx>-10000</posx>
             <texture>dark.png</texture>
         </control>
 
+      <control type="image">
+            <posx>-10000</posx>
+            <texture>live.png</texture>
+        </control>
 
         <!-- Background -->
 		<control type="image" id="4600">
@@ -462,7 +449,7 @@
                 <description>Program title</description>
                 <posx>110</posx>
                 <posy>510</posy>
-                <width>630</width>
+                <width>590</width>
                 <height>50</height>
                 <textcolor>ffffffff</textcolor>
                 <font>font13</font>
@@ -477,7 +464,17 @@
                 <aspectratio>keep</aspectratio>
                 <fadetime>500</fadetime>
                 <visible>true</visible>
-				<!-- unused in default skin -->
+            </control>
+
+            <control type="image" id="4944">
+                <description>Live</description>
+                <posx>688</posx>
+                <posy>526</posy>
+                <width>80</width>
+                <height>18</height>
+                <aspectratio>keep</aspectratio>
+                <fadetime>500</fadetime>
+                <visible>true</visible>
             </control>
             <control type="label" id="4921">
                 <description>Program time</description>

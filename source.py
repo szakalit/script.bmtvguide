@@ -37,6 +37,13 @@ import sqlite3
 
 SETTINGS_TO_CHECK = ['source', 'xmltv.file', 'xmltv.logo.folder', 'm-TVGuide', 'Time.Zone']
 
+
+def deb(s):
+    xbmc.log("*******>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    xbmc.log("*******>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + str(s))
+    xbmc.log("*******>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+
+
 class Channel(object):
     def __init__(self, id, title, logo = None, streamUrl = None, visible = True, weight = -1):
         self.id = id
@@ -491,6 +498,7 @@ class Database(object):
         if row:
             program = Program(channel, row['title'], row['start_date'], row['end_date'], row['description'], row['image_large'], row['image_small'], row['categoryA'], row['categoryB'])
         c.close()
+
         return program
 
     def getNextProgram(self, channel):
@@ -545,8 +553,8 @@ class Database(object):
         c.execute('SELECT p.*, (SELECT 1 FROM notifications n WHERE n.channel=p.channel AND n.program_title=p.title AND n.source=p.source) AS notification_scheduled FROM programs p WHERE p.channel IN (\'' + ('\',\''.join(channelMap.keys())) + '\') AND p.source=? AND p.end_date > ? AND p.start_date < ?', [self.source.KEY, startTime, endTime])
         for row in c:
             program = Program(channelMap[row['channel']], row['title'], row['start_date'], row['end_date'], row['description'], row['image_large'], row['image_small'], row['categoryA'], row['categoryB'], row['notification_scheduled'])
-            programList.append(program)
 
+            programList.append(program)
 
         return programList
 
@@ -887,6 +895,14 @@ def parseXMLTV(context, f, size, logoFolder, progress_callback):
                 description = elem.findtext("desc")
                 iconElement = elem.findtext("sub-title")
                 cat = elem.findall("category")
+                live3 = ''
+                live = elem.findtext("video")
+                if live is not None:
+                    for ele in elem:
+                        live2 = ele.findtext("aspect")
+                        if live2 is not None:
+                            live3 = live2
+                        pass
                 try:
                     cata = cat[0].text
                 except:
@@ -901,7 +917,7 @@ def parseXMLTV(context, f, size, logoFolder, progress_callback):
                     icon = iconElement
                 if not description:
                     description = strings(NO_DESCRIPTION)
-                result = Program(channel, elem.findtext('title'), TimeZone(parseXMLTVDate(elem.get('start'))),TimeZone( parseXMLTVDate(elem.get('stop'))), description, imageSmall=icon, categoryA=cata,categoryB=catb)
+                result = Program(channel, elem.findtext('title'), TimeZone(parseXMLTVDate(elem.get('start'))),TimeZone( parseXMLTVDate(elem.get('stop'))), description, imageLarge=live3, imageSmall=icon, categoryA=cata,categoryB=catb)
 
             elif elem.tag == "channel":
                 id = elem.get("id")

@@ -62,6 +62,8 @@ C_MAIN_TIME = 4921
 C_MAIN_DESCRIPTION = 4922
 C_MAIN_IMAGE = 4923
 C_MAIN_LOGO = 4924
+C_MAIN_LIVE = 4944
+
 
 ACTION_MOUSE_WHEEL_UP = 104
 ACTION_MOUSE_WHEEL_DOWN = 105
@@ -148,6 +150,7 @@ class mTVGuide(xbmcgui.WindowXML):
     C_MAIN_EPG = 5000
     C_MAIN_EPG_VIEW_MARKER = 5001
     C_MAIN_INFO = 7000
+    C_MAIN_LIVE = 4944
 
     def __new__(cls):
         return super(mTVGuide, cls).__new__(cls, 'script-tvguide-main.xml', ADDON.getAddonInfo('path'), ADDON.getSetting('Skin'), "720p")
@@ -509,10 +512,10 @@ class mTVGuide(xbmcgui.WindowXML):
             self.setControlImage(self.C_MAIN_IMAGE, program.imageSmall)
         if program.imageSmall is None:
             self.setControlImage(self.C_MAIN_IMAGE, 'tvguide-logo-epg.png')
-
-        if ADDON.getSetting('program.background.enabled') == 'true' and program.imageLarge is not None:
-            self.setControlImage(self.C_MAIN_BACKGROUND, program.imageLarge)
-
+        if program.imageLarge == 'live':
+            self.setControlImage(self.C_MAIN_LIVE, 'live.png')
+        else:
+            self.setControlImage(self.C_MAIN_LIVE, '')
 
     def _left(self, currentFocus):
         debug('_left')
@@ -798,7 +801,6 @@ class mTVGuide(xbmcgui.WindowXML):
                 )
 
                 self.controlAndProgramList.append(ControlAndProgram(control, program))
-
         # add program controls
         if focusFunction is None:
             focusFunction = self._findControlAt
@@ -1537,6 +1539,10 @@ class InfoDialog(xbmcgui.WindowXMLDialog):
             self.setControlImage(C_MAIN_IMAGE, self.program.imageSmall)
         if self.program.imageSmall is None:
             self.setControlImage(C_MAIN_IMAGE, 'tvguide-logo-epg.png')
+        if self.program.imageLarge == 'live':
+            self.setControlImage(C_MAIN_LIVE, 'live.png')
+        else:
+            self.setControlImage(C_MAIN_LIVE, '')
 
         self.stdat = time.mktime(self.program.startDate.timetuple())
         self.endat = time.mktime(self.program.endDate.timetuple())

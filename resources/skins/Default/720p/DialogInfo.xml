@@ -75,6 +75,18 @@
                 <aspectratio>keep</aspectratio>
                 <fadetime>500</fadetime>
             </control>
+
+            <control type="image" id="4944">
+                <description>Live</description>
+                <posx>665</posx>
+                <posy>72</posy>
+                <width>80</width>
+                <height>18</height>
+                <aspectratio>keep</aspectratio>
+                <fadetime>500</fadetime>
+                <visible>true</visible>
+            </control>
+
             <control type="label" id="4921">
                 <description>Program time</description>
                 <posx>880</posx>
