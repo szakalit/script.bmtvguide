@@ -763,6 +763,18 @@
                
 				<!-- unused in default skin -->
             </control>
+
+            <control type="image" id="4944">
+                <description>Live</description>
+                <posx>688</posx>
+                <posy>526</posy>
+                <width>80</width>
+                <height>18</height>
+                <aspectratio>keep</aspectratio>
+                <fadetime>500</fadetime>
+                <visible>false</visible>
+            </control>
+
             <control type="label" id="4921">
                 <description>Program time</description>
                 <posx>800</posx>

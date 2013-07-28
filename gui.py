@@ -1607,6 +1607,7 @@ class Pla(xbmcgui.WindowXMLDialog):
             xbmc.Player().stop()
             self.close()
 
+
         if action.getId() == ACTION_SHOW_INFO or (action.getButtonCode() == KEY_INFO and KEY_INFO != 0) or (action.getId() == KEY_INFO and KEY_INFO != 0):
             try:
                 self.program = self.database.getCurrentProgram(self.currentChannel)
@@ -1622,6 +1623,10 @@ class Pla(xbmcgui.WindowXMLDialog):
             self.ChannelChanged = 1
             self._channelDown()
 
+        if (action.getButtonCode() == KEY_HOME2 and KEY_HOME2 != 0) or (action.getId() == KEY_HOME2 and KEY_HOME2 != 0):
+            #xbmc.executebuiltin("Action(PreviousMenu)")
+            xbmc.executebuiltin("SendClick(VideoLibrary)")
+            #self.setFocus('video')
 
         if action.getId() == ACTION_MOUSE_MOVE and xbmc.Player().isPlaying():
             self.mouseCount = self.mouseCount + 1
